@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.5b1 [en] (X11; I; Linux 2.0.33 i586) [Netscape]">
+   <META NAME="Author" CONTENT="Daniel Hahn">
+   <TITLE>Kryptographie - Signaturen und Vertrauen</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#FFFFFF" VLINK="#FFCCCC" ALINK="#FF0000">
+
+<DIV ALIGN=right><A HREF="service.html"><IMG SRC="back.gif" ALT="home" NOSAVE BORDER=0 HEIGHT=22 WIDTH=72></A></DIV>
+
+<TABLE CELLSPACING=0 CELLPADDING=20 >
+<TR>
+<TD ALIGN=CENTER VALIGN=TOP BGCOLOR="#000000"><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto.html">[einleitung]</A></FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man1.html">[problem]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man2.html">[public
+key?]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man3.html">[gefahren]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[signaturen &amp;
+vertrauen]</FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man5.html">[verstanden?]</A></FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[praxis]</FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[pgp quick start]</FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[software]</FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[sicherheit]</FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="mailto:unp2@rz.uni-karlsruhe.de">[email
+me]</A></FONT></FONT></B>
+<BR>&nbsp;</TD>
+
+<TD>
+<CENTER>
+<H2>
+<FONT FACE="Arial,Helvetica">Signaturen und Vertrauen</FONT></H2></CENTER>
+<FONT FACE="Arial"><FONT COLOR="#000000">Bernd m&ouml;chte also &uuml;berpr&uuml;fen,
+ob der &ouml;ffentliche Schl&uuml;ssel, den er bekommen hat, wirklich Andreas
+&ouml;ffentlicher Schl&uuml;ssel ist.</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Dazu k&ouml;nnter er zum Beispiel
+Andrea anrufen, und sich von ihr den Schl&uuml;ssel genau beschreiben lassen.
+(Wenn es nicht der echte ist, m&uuml;&szlig;te er sich ja von dem Schl&uuml;ssel
+den Andrea abgeschickt hat unterscheiden.)</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Das ganze funktioniert eigentlich
+schon prima, aber Andrea und Bernd m&uuml;ssen sich kennen, und von Mexiko
+nach Helsiki zu telefonieren ist auch nicht gerade billig.</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Aber es gibt ja noch Volker.
+Volker ist Notar (oder irgendeine andere sehr vertrauensw&uuml;rdige Person).
+Andrea bringt ihren Schl&uuml;ssel zu Volker, und der best&auml;tigt mit
+seinem Siegel und seiner Unterschrift da&szlig; dieser Schl&uuml;ssel wirklich
+Andrea geh&ouml;rt. Volker befestigt die Best&auml;tigung an Andreas Schl&uuml;ssel.</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Wenn Bernd dann den Schl&uuml;ssel
+bekommt, kann er an Volkers Siegel und Unterschrift sehen, da&szlig; der
+Schl&uuml;ssel wirklich echt ist, denn Volkers Siegel kann Magadalena nicht
+f&auml;lschen.</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">In der Kryptographie sagt man,
+da&szlig; Volker Andreas Schl&uuml;ssel <B>signiert </B>hat. Bernd &uuml;berpr&uuml;ft
+Volkers Signatur, um festzustellen, ob der Schl&uuml;ssel echt ist.</FONT></FONT>
+<P><B><FONT FACE="Arial"><FONT COLOR="#000000">Digitale Unterschrift</FONT></FONT></B>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">In Wirklichkeit benutzt Volker
+nat&uuml;rlich keine richtigen Siegel, sonder er bringt an Andreas Schl&uuml;ssel
+eine <B>digitale Unterschrift an.&nbsp;</B></FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Jeder Benutzer eines Public-Key-Verfahrens
+kann n&auml;mlich mit seinem geheimen Schl&uuml;ssel digitale Unterschriften
+erzeugen.</FONT></FONT>
+<BR><FONT FACE="Arial"><FONT COLOR="#000000">Die Unterschriften k&ouml;nnen
+dann mit dem dazugeh&ouml;rigen &ouml;ffentlichen Schl&uuml;ssel &uuml;berpr&uuml;ft
+werden. (Nat&uuml;rlich muss auch hier wieder feststehen, da&szlig; der
+&ouml;ffentliche Schl&uuml;ssel echt ist)</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Bernd kann mit Volkers &ouml;ffentlichem
+Schl&uuml;ssel also &uuml;berpr&uuml;fen, ob Andreas Schl&uuml;ssel echt
+ist.</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Menschen oder Institutionen,
+die mit ihrer digitalen Unterschrift die Echtheit von Schl&uuml;sseln best&auml;tigen,
+nennt man auch <B>Zertifizierungsstellen </B>oder<B> Certification Authorities.</B></FONT></FONT>
+<BR>&nbsp;
+<P><B><FONT FACE="Arial"><FONT COLOR="#000000">Merke:</FONT></FONT></B>
+<BR>&nbsp;
+<UL>
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000">Eine vertrauensw&uuml;rdige dritte
+Person (oder Institution) kann einen &ouml;ffentlichen Schl&uuml;ssel <B>signieren</B>,
+um dessen Echtheit zu best&auml;tigen.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000">Um eine Signatur zu &uuml;berpr&uuml;fen
+(<B>verifizieren</B>), ben&ouml;tigt man den &ouml;ffentlichen Schl&uuml;ssel
+des Signierenden.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000">Bevor man einen &ouml;ffentlichen
+Schl&uuml;ssel signiert, mu&szlig; man sich vergewisseren, da&szlig; dieser
+Schl&uuml;ssel <B>wirklich</B> der Person geh&ouml;rt, deren Namen er tr&auml;gt.</FONT></FONT></LI>
+</UL>
+
+<DIV ALIGN=right><A HREF="crypto_man5.html"><IMG SRC="weiter.gif" NOSAVE BORDER=0 HEIGHT=22 WIDTH=72></A></DIV>
+</TD>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>

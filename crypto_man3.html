@@ -1,0 +1,75 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.5b1 [en] (X11; I; Linux 2.0.33 i586) [Netscape]">
+   <META NAME="Author" CONTENT="Daniel Hahn">
+   <TITLE>Kryptographie - Gefahren</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#FFFFFF" VLINK="#FFCCCC" ALINK="#FF0000">
+
+<DIV ALIGN=right><A HREF="service.html"><IMG SRC="back.gif" ALT="home" NOSAVE BORDER=0 HEIGHT=22 WIDTH=72></A></DIV>
+
+<TABLE CELLSPACING=0 CELLPADDING=20 >
+<TR>
+<TD ALIGN=CENTER VALIGN=TOP BGCOLOR="#000000"><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto.html">[einleitung]</A></FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man1.html">[problem]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man2.html">[public
+key?]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[gefahren]</FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man4.html">[signaturen
+&amp; vertrauen]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man5.html">[verstanden?]</A></FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[praxis]</FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[pgp quick start]</FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[software]</FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[sicherheit]</FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="mailto:unp2@rz.uni-karlsruhe.de">[email
+me]</A></FONT></FONT></B>
+<BR>&nbsp;</TD>
+
+<TD>
+<CENTER>
+<H2>
+<FONT FACE="Arial,Helvetica">Gefahren</FONT></H2></CENTER>
+<FONT FACE="Arial"><FONT COLOR="#000000">Andrea und Bernd haben benutzen
+jetzt ihr tolles, neues, public key Verschl&uuml;sselungsverfahren, und
+Magdalena kann die email nicht mehr mitlesen. Aber sie gibt nicht auf,
+denn es gibt immer noch eine M&ouml;glichkeit:</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Wenn Andrea ihr Schlo&szlig;
+mit dem &ouml;ffentlichen Schl&uuml;ssel zu Bernd schickt, f&auml;ngt Magdalena
+es ab, und baut ein Schlo&szlig;, das genauso funktioniert und zu dem sie
+die Schl&uuml;ssel hat.</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Bernd denkt, der &ouml;ffentliche
+Schl&uuml;ssel kommt von Andrea, und benutzt ihn um seine Nachricht abzuschlie&szlig;en.
+Magdalena kann jetzt die Nachricht abfangen, und weil sie ja mit dem gef&auml;lschten
+Schlo&szlig; abgeschlossen wurde, kann Magdalena die Nachricht auch lesen.&nbsp;</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Magdalena kann sogar die Nachricht,
+nachdem sie sie gelesen hat, mit dem richtigen Schlo&szlig; verschlie&szlig;en
+und an Andrea weiterschicken. Weder Andrea noch Bernd w&uuml;rden ja bemerken,
+da&szlig; ihre verschl&uuml;sselten Nachrichten nicht mehr geheim sind.&nbsp;</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Was k&ouml;nnen Andrea und
+Bernd dagegen tun? Bernd m&uuml;&szlig;te irgendwie &uuml;berpr&uuml;fen
+k&ouml;nnen, ob der Schl&uuml;ssel den er bekommen hat auch wirklich Andreas
+Schl&uuml;ssel ist. Wie das geht, wird auf der n&auml;chsten Seite erkl&auml;rt.</FONT></FONT>
+<P><B><FONT FACE="Arial"><FONT COLOR="#000000">Merke:</FONT></FONT></B>
+<BR>&nbsp;
+<UL>
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000">Eine Public-Key Verschl&uuml;sselung
+kann unterwandert werden, indem &ouml;ffentliche Schl&uuml;ssel mit gef&auml;lschten
+vertauscht werden.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000">Das System ist nur sicher, wenn
+man &uuml;berpr&uuml;fen kann, da&szlig; ein &ouml;ffentlcher Schl&uuml;ssel
+wirklich zu der Person geh&ouml;rt, deren Namen er tr&auml;gt.</FONT></FONT></LI>
+</UL>
+
+<DIV ALIGN=right><A HREF="crypto_man4.html"><IMG SRC="weiter.gif" NOSAVE BORDER=0 HEIGHT=22 WIDTH=72></A></DIV>
+</TD>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>

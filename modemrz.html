@@ -1,0 +1,189 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.5b1 [en] (X11; I; Linux 2.0.33 i586) [Netscape]">
+   <META NAME="Author" CONTENT="Daniel Hahn">
+   <TITLE>SLIP Zugang zum UNI-RZ</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#FFFFFF" VLINK="#FFCCCC" ALINK="#FF0000">
+
+<DIV ALIGN=right><A HREF="index.html"><IMG SRC="home.gif" ALT="home" BORDER=0 ></A></DIV>
+
+<TABLE CELLSPACING=0 CELLPADDING=20 >
+<TR>
+<TD ALIGN=CENTER VALIGN=TOP BGCOLOR="#000000"><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="service.html">[overview]</A></FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto.html">[kryptographie]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[rz terminalzugang]</FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="mailto:unp2@rz.uni-karlsruhe.de">[email
+me]</A></FONT></FONT></B>
+<BR>&nbsp;</TD>
+
+<TD><FONT FACE="Arial,Helvetica"><B>Warnung: </B>Diese Skripte und Einstellungen
+laufen auf meine System, aber das hei&szlig;t nicht da&szlig; sie es anderswo
+auch tun. Wer m&ouml;chte, kann sie gerne benutzen, aber nur auf eigene
+Gefahr. Ich werde keinerlei Verantwortung f&uuml;r Fehler in diesen Informationen
+&uuml;bernehmen. Insbesonder garantiere ich nicht, da&szlig; der Befehl
+zum Beenden der Verbindung die Leitung auch wirklich auflegt! Falls er
+es nicht tut, werde ich die Telefonrechnung nicht bezahlen! (Also, immer
+erst pr&uuml;fen!)&nbsp;</FONT>
+<P><FONT FACE="Arial,Helvetica"><B>Anmerkung: </B>Es gibt hier nur noch
+die Anleitung f&uuml;r einen dip (Linux-SLIP) Zugang &uuml;ber die alten
+Terminalserverver der Uni Karlsruhe. Das RZ hat inzwichen einen PPP-Zugang
+installiert, der per Modem und ISDN erreichbar ist und die alten Terminalserver
+langfristig ersetzen sollt. Der PPP-Zugang sollte auch erheblich einfacher
+zu konfigurieren sein.&nbsp;</FONT>
+<BR><FONT FACE="Arial,Helvetica">Informationen hierzu gibt es auf den Seiten
+der Uni.</FONT><FONT FACE="Arial,Helvetica"></FONT>
+<P><FONT FACE="Arial,Helvetica"><B>Anmerkung 2: </B>Der alte Terminalserver
+wurde inzwischen abgeschaltet, es gibt auf der neuen ASCEND zwar noch eine
+Emulation des alten Zuganges. Gr&uuml;nde, kein PPP zu benutzen, kann ich
+mir inzwischen aber nicht mehr vorstellen. Diese Seite bleibt als historisches
+Dokument.</FONT>
+<P><FONT FACE="Arial,Helvetica">Aus den o.g. Gr&uuml;nden, und da ich inzwischen
+ISDN benutze,&nbsp; werde ich diese Seite nicht weiter pflegen.</FONT>
+<BR>&nbsp;
+<BR>&nbsp;
+<CENTER>
+<H2>
+<FONT FACE="Arial,Helvetica">Modem Dialup zum RZ (Linux)</FONT></H2></CENTER>
+Hier ist mein dip Skrip f&uuml;r den RZ-Modemzugang &uuml;ber die Nummer
+376822. Bevor dieses Skript auf einem anderen Rechner l&auml;uft, m&uuml;ssen
+auf jeden Fall einige Ver&auml;nderung vorgenommen werden. Was einzustellen
+ist, steht in den Kommentaren im Skript. (Wer die Kommentare nicht sorgf&auml;ltig
+liest, ist selber schuld wenn's nicht funktioniert.)&nbsp;
+<BR>Statt der rzstud1 kann evtl. auch ein anderer Host verwendet werden.&nbsp;
+<P>Um eine Verbindung aufzubauen, ben&ouml;tigt man einen Linux-Kernel
+mit SLIP-Support, und den SLIP-Dialler dip (meistens in der SLIP-Software
+der Linux-Distribution).&nbsp;
+<BR>Der Verbindugsaufbau erfolgt mit:&nbsp;
+<P><TT>dip &lt;Skriptdatei></TT>
+<P>der Verbindugsabbau mit <TT>dip -k.</TT>
+<P>(Und ja, es gibt garantiert sehr viel elegantere Skripten (evtl. sogar
+auf den studinfo-Seiten). Aber dieses funktioniert f&uuml;r mich)&nbsp;
+<BR>&nbsp;
+<P><TT>#</TT>
+<BR><TT># rz.dip Dialup IP connection support program.</TT>
+<BR><TT># Fuer RZ angepasste Version von "sample.dip".</TT>
+<BR><TT>#</TT>
+<BR><TT># Datum: 16.10.95</TT>
+<BR><TT>#</TT>
+<P><TT>main:</TT>
+<BR><TT>&nbsp;</TT>
+<BR><TT># Zuerst einmal unseren eigenen Namen (und damit die IP)</TT>
+<BR><TT># Da die lokal IP irrelevant ist, verwenden wir den lokalen Rechnernamen
+und IP</TT>
+<BR><TT>#</TT>
+<BR><TT># Hier sollte aber immer eine IP stehen, oder ein Rechnername,
+der lokal aufgel&ouml;st</TT>
+<BR><TT># werden kann. (d.h. in /etc/hosts)</TT>
+<P><TT>get $local bigBrother</TT>
+<P><TT># Nun die Gegenstelle angeben. F&uuml;r uns ist das die rzstud1.</TT>
+<BR><TT># Damit dip den Rechnernamen aufl&ouml;sen kann, muss die rzstud1
+aber in /etc/hosts</TT>
+<BR><TT># eingetragen sein.</TT>
+<BR><TT># Gegenstelle: 'rzstud1.rz.uni-karlsruhe.de' (== 129.13.95.1)</TT>
+<P><TT>get $remote rzstud1</TT>
+<P><TT># Netmask f&uuml;r sl0 ist 255.255.255.0</TT>
+<BR><TT>netmask 255.255.255.0</TT>
+<P><TT># Modemport und Geschwindigkeit einstellen. In diesem Fall ist ein
+28.8 Modem an</TT>
+<BR><TT># /dev/modem angeschlossen</TT>
+<P><TT>port modem</TT>
+<BR><TT>speed 38400</TT>
+<P><TT># Modemreset. Das kann evtl. Probleme geben.</TT>
+<BR><TT>reset</TT>
+<P><TT># Hinweis: Vorgegebene Errorlevel sind:</TT>
+<BR><TT># 0 - OK</TT>
+<BR><TT># 1 - CONNECT</TT>
+<BR><TT># 2 - ERROR</TT>
+<BR><TT>#</TT>
+<BR><TT># You can change those grep'ping for "addchat()" in *.c...</TT>
+<P><TT># Anwahl der Gegenstelle. Der Init-String ist f&uuml;r mein Modem
+angepasst. Evtl. einfach</TT>
+<BR><TT># durch ATZ ersetzen</TT>
+<P><TT>send ATQ0V1E1X4\r</TT>
+<BR><TT>wait OK 2</TT>
+<BR><TT>if $errlvl != 0 goto modem_trouble</TT>
+<BR><TT>dial t376822</TT>
+<BR><TT>if $errlvl != 1 goto modem_troubl</TT>
+<P><TT># Wir haben jetzt Verbindung mit dem Terminalserver und versuchen
+eine</TT>
+<BR><TT># Telnetverbindung zur rzstud1 aufzubauen</TT>
+<P><TT>login:</TT>
+<BR><TT>print Connected. Trying to log into rzstud...</TT>
+<BR><TT>sleep 2</TT>
+<P><TT># Auf rz-Hauptmenue warten.</TT>
+<BR><TT>wait >> 20</TT>
+<BR><TT>if $errlvl != 0 goto login_error</TT>
+<BR><TT># mit 's' in die rzstud</TT>
+<BR><TT>print Caught rz-Menue. Trying telnet to ab263...</TT>
+<BR><TT>send t\r</TT>
+<BR><TT>wait > 30</TT>
+<BR><TT>send rzstud1\r</TT>
+<BR><TT>print Trying telnet to rzstud1, waiting for login prompt...</TT>
+<BR><TT># Auf 'login:' warten</TT>
+<BR><TT>wait ogin: 30</TT>
+<BR><TT>if $errlvl != 0 goto login_error</TT>
+<P><TT># Benutzername senden (hier muss nat&uuml;rlich der eigene Benutzername
+eingetragen werden!</TT>
+<BR><TT>print Caught login prompt. Sending username...</TT>
+<BR><TT>send unp2\r</TT>
+<P><TT># Auf 'Password:' warten</TT>
+<BR><TT>wait ord: 90</TT>
+<BR><TT>if $errlvl != 0 goto password_error</TT>
+<P><TT># Passwort senden (Hier muss das eigene Password eingetragen werden.</TT>
+<BR><TT># Achtung: wenn das Passwort schon im Klartext in einer Datei steht,
+wenigstens die</TT>
+<BR><TT># Permissions auf 600 setzen. Es gibt auch die M&ouml;glichkeit,
+bei jedem Verbindungs-</TT>
+<BR><TT># aufbau das Passwort neu anzugeben.</TT>
+<P><TT>print Caught password prompt. Sending password...</TT>
+<BR><TT>send PASSWORT\r</TT>
+<BR><TT>loggedin:</TT>
+<P><TT># Wir sind jetzt eingeloggt und warten auf das Shell-Prompt</TT>
+<BR><TT># ACHTUNG: Ich verwende die bash, die sich mit einem "bash$" als
+Prompt meldet</TT>
+<BR><TT># Wer eine andere Shell verwendet, mu&szlig; im naechsten wait-Befehl
+das $ durch das</TT>
+<BR><TT># Promptzeichen seiner eigenen Shell ersetzen. (Bei der RZ-Default-Einstellung
+z.B. ein</TT>
+<BR><TT># '>'</TT>
+<P><TT>print Waiting for shell prompt</TT>
+<BR><TT>wait $ 60</TT>
+<BR><TT>if $errlvl != 0 goto prompt_error</TT>
+<P><TT># SLIP mit dem Befehl 'slirp -m 552 -c' auf der rzstud starten</TT>
+<BR><TT>print Startin slirp on the remote end...</TT>
+<BR><TT>send slirp -m 552 -c\r</TT>
+<BR><TT># Set up the SLIP operating parameters.</TT>
+<BR><TT>get $mtu 552</TT>
+<BR><TT>default</TT>
+<P><TT># Jetzt nur noch SLIP einrichten...</TT>
+<BR><TT>done:</TT>
+<BR><TT>print CONNECTED $locip ---> $rmtip</TT>
+<BR><TT>mode CSLIP</TT>
+<BR><TT>goto exit</TT>
+<BR>&nbsp;
+<P><TT># Hier kommen nur noch die Fehlermeldungen</TT>
+<P><TT>prompt_error:</TT>
+<BR><TT>print TIME-OUT waiting for SLIPlogin to fire up...</TT>
+<BR><TT>goto error</TT>
+<P><TT>login_error:</TT>
+<BR><TT>print Trouble waiting for the Login: prompt...</TT>
+<BR><TT>goto error</TT>
+<P><TT>password_error:</TT>
+<BR><TT>print Trouble waiting for the Password: prompt...</TT>
+<BR><TT>goto error</TT>
+<P><TT>modem_trouble:</TT>
+<BR><TT>print Trouble ocurred with the modem...</TT>
+<P><TT>error:</TT>
+<BR><TT>print CONNECT FAILED to $remote</TT>
+<BR><TT>quit</TT>
+<P><TT>exit:</TT>
+<BR><TT>exit</TT>
+<BR>&nbsp;</TD>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>

@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD>
+   <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+   <META NAME="GENERATOR" CONTENT="Mozilla/4.5b1 [en] (X11; I; Linux 2.0.33 i586) [Netscape]">
+   <META NAME="Author" CONTENT="Daniel Hahn">
+   <TITLE>Kryptographie - Public Key Systeme</TITLE>
+</HEAD>
+<BODY TEXT="#000000" BGCOLOR="#FFFFFF" LINK="#FFFFFF" VLINK="#FFCCCC" ALINK="#FF0000">
+
+<DIV ALIGN=right><A HREF="service.html"><IMG SRC="back.gif" ALT="home" NOSAVE BORDER=0 HEIGHT=22 WIDTH=72></A></DIV>
+
+<TABLE CELLSPACING=0 CELLPADDING=20 >
+<TR>
+<TD ALIGN=CENTER VALIGN=TOP BGCOLOR="#000000"><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto.html">[einleitung]</A></FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man1.html">[problem]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[public key?]</FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man3.html">[gefahren]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man4.html">[signaturen
+&amp; vertrauen]</A></FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="crypto_man5.html">[verstanden?]</A></FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[praxis]</FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[pgp quick start]</FONT></FONT></B>
+<BR><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[software]</FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF">[sicherheit]</FONT></FONT></B>
+<P><B><FONT FACE="Arial,Helvetica"><FONT COLOR="#FFFFFF"><A HREF="mailto:unp2@rz.uni-karlsruhe.de">[email
+me]</A></FONT></FONT></B>
+<BR>&nbsp;</TD>
+
+<TD>
+<CENTER>
+<H2>
+<FONT FACE="Arial,Helvetica">Public Key? Was ist denn das?</FONT></H2></CENTER>
+<FONT FACE="Arial"><FONT COLOR="#000000">Bleiben wir bei unserem Vergleich
+mit dem K&auml;stchen und dem Vorh&auml;ngeschlo&szlig;. Andrea, die ja
+nicht extra nach Mexiko fahren kann um Bernd den Schl&uuml;ssel zu geben,
+konstruiert ein anderes Vorh&auml;ngeschlo&szlig; f&uuml;r das K&auml;stchen.</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Dieses Schlo&szlig; hat zwei
+Schl&uuml;ssell&ouml;cher, und zwei Schl&uuml;ssel. Au&szlig;erdem ist
+es so konstruiert, da&szlig;, wenn man es mit einem von den beiden Schl&uuml;sseln
+abschlie&szlig;t, es nur mit dem anderen Schl&uuml;ssel ge&ouml;ffnet werden
+kann.&nbsp;</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Andrea beh&auml;lt einen von
+den beiden Schl&uuml;sseln (den <B>geheimen Schl&uuml;ssel</B>) und schickt
+das Schlo&szlig; mit dem anderen Schl&uuml;ssel (dem <B>&ouml;ffentlichen
+Schl&uuml;ssel</B>) an Bernd. Weil die beiden Schl&uuml;ssel zusammengeh&ouml;ren,
+nennt man sie auch ein <B>Schl&uuml;sselpaar</B>.</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Der nimmt seine Nachricht,
+legt sie in das K&auml;stchen und verschlie&szlig;t es mit dem &ouml;ffentlichen
+Schl&uuml;ssel. Nur Andrea kann jetzt das Schlo&szlig; noch &ouml;ffnen
+indem sie ihren geheimen Schl&uuml;ssel benutzt.</FONT></FONT>
+<P><FONT FACE="Arial"><FONT COLOR="#000000">Selbst wenn Magdalana sich
+eine Kopie von Andreas &ouml;ffentlichem Schl&uuml;ssel gemacht hat, n&uuml;tzt
+ihr das nichts:</FONT></FONT>
+<BR><FONT FACE="Arial"><FONT COLOR="#000000">Das Schlo&szlig; kann ja nur
+mit dem geheimen Schl&uuml;ssel ge&ouml;ffnet werden, und den hat Andrea
+sicher versteckt.</FONT></FONT>
+<P><B><FONT FACE="Arial"><FONT COLOR="#000000">Kompliziert? Hier noch 'mal
+alles in Stichpunkten:</FONT></FONT></B>
+<BR>&nbsp;
+<UL>
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000">Jede Person hat zwei Schl&uuml;ssel,
+einen geheimen und einen &ouml;ffentlichen</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000">Der &ouml;ffentliche Schl&uuml;ssel
+wird an alle Personen verteilt, mit denen man Nachrichten austauschen will.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000">Mit dem &ouml;ffentlichen Schl&uuml;ssel
+kann man Nachrichten verschl&uuml;sseln.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000">Mit dem geheimen Schl&uuml;ssel
+kann man verschl&uuml;sselte Nachrichten entschl&uuml;sseln.</FONT></FONT></LI>
+
+<LI>
+<FONT FACE="Arial"><FONT COLOR="#000000"><B>Wichtig:</B> Nachrichten, die
+mit einem &ouml;ffentlichen Schl&uuml;ssel verschl&uuml;sselt wurden, k&ouml;nnen
+<B>nur</B>
+mit dem <B>dazugeh&ouml;rigen</B> geheimen Schl&uuml;ssel gelesen werden.</FONT></FONT></LI>
+</UL>
+
+<DIV ALIGN=right><A HREF="crypto_man3.html"><IMG SRC="weiter.gif" NOSAVE BORDER=0 HEIGHT=22 WIDTH=72></A></DIV>
+</TD>
+</TR>
+</TABLE>
+
+</BODY>
+</HTML>

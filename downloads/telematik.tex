@@ -1,0 +1,1765 @@
+\documentclass[a4paper]{danarticle}
+\usepackage{a4}
+\usepackage{german}
+\pagestyle{headings}
+\sloppy
+
+
+\begin{document}
+  \author{Daniel Hahn}
+  \title{Telematik on a Spickzettel}
+  \maketitle
+  
+  \begin{abstract}
+    Dies ist eine Zusammenfassung der verschiedenen Telematik-Inhalte die ich
+    als Vorbereitung auf meine Pr"ufung bei Prof. Zitterbart im SS 01
+    zusammengeschrieben habe. Die Erkl"arungen in diesem Dokument m"ussen nicht 
+    unbedingt richtig sein,
+    ich habe das ganze zusammengeschrieben um es selber besser zu verstehen. Du
+    wurdest gewarnt. Au"serdem sind noch viele Teile unvollst"andig, z.B. gibt
+    es zu ISDN viel mehr zu sagen als hier steht - und ich werde das Dokument
+    auch nicht fortschreiben
+    
+    \textbf{Nochmal: Dieses Werk wurde zu "Ubungszwecken angefertigt. Es ist
+    teilweise fehlerhaft und unvollst"andig. Es ist NICHT geeignet als
+    alleiniges Lehrmaterial f"ur eine Pr"ufung. Du wurdest gewarnt.}
+    
+  \end{abstract}
+  
+  \section*{Die sieben Schichten}
+    Die sieben Schichten stammen aus dem ISO/OSI Basis-Referenzmodell.
+    Eigentlich sind es nur sieben, weil IBM damals sieben hatte, und das ganze
+    Modell ist leicht konfus. Das Modell geht davon aus, da"s jede Schicht ihre
+    Dienste an Dienstzugangspunkten (SAP - Service Access Point) der
+    n"achsth"oheren Schicht zur Verf"ugung stellt.
+  \section{Bit"ubertrangsschicht}
+    Auch: Physical Layer. Diese Schicht befasst sich mit dem Transpor
+    einzelner Bits zwischen zwei Ger"aten.
+    \subsection*{Theoretische Grundlagen}
+      \subsubsection*{Fourier-Analyse}
+        M. Fourier entdeckte, da"s jede jede periodische Funktion $g(t)$ sich
+        durch die Summe (unendlich) vieler Sinus- und Cosinusfunktionen
+        nachbilden l"asst.
+        \[
+          g(t) = \sum^{\infty}_{n=1} a_n \sin(2 \pi nft) +
+                 \sum^{\infty}_{n=1} b_n \cos(2 \pi nft)
+        \]
+        Dabei ist $ f = 1/T $ die Grundfrequenz und $ a_n $ und $ b_n $ die
+        Amplituden der $n$-ten Harmonischen.
+          
+        \textbf{Bedeutung:} Eine Funktion (also z.B. ein Datensignal) 
+        l"asst sich als
+        Kombination (m"oglicherweise unendlich) vieler Sinus- und
+        Cosinusschwingungen verschiedener Frequenz auffassen. Ist der
+        Frequenzraum beschr"ankt (durch D"ampfung oder per Filter), so k"onnen
+        einige der Sinus- und Cossinusschwingungen nicht passieren, und das
+        Ausganssignal wird verf"alscht.
+      \subsubsection*{Nyquist-Theorem}
+        Wenn ein Signal eine Bandbreite von $ H $ Hertz zur Verf"ugung hat,
+        kann es durch $ 2H $ Samples pro Sekunde vollst"andig wieder
+        hergestellt werden. Eine h"ohere Abtastrate bringt keinen Vorteil, da
+        ja keine h"oheren Frequenzen vorhanden sind, die durch die h"ohere 
+        Abtastrate entdeckt werden k"onnten.
+          
+        \textbf{Dumme Frage:} Warum $ 2H $ und nicht $ H $? (Vielleicht weil
+        nur so jede wichtige "Anderung \glq erwischt\grq wird?
+          
+        Dies begrenzt die maximale Datenrate auf einem (rauschfreien!) Kanal
+        auf 
+        \[ 2H \log_2 V \mbox{\hspace{1mm} Bit/Sekunde} \]
+        wenn pro Abtastung $ V $ diskrete Signale unterschieden werden
+        k"onnen. (Logischerweise kann die Kapazit"at hier immer noch beliebig
+        gro"s sein, wenn man $ V $ entsprechend w"ahlt).
+      \subsubsection*{Shannon-Theorem}
+        Shannon hat gezeigt, da"s in einem verrauschten Kanal maximal
+        \[ H log_2 (1 + S/N) \]
+        Bit pro Sekunde "ubertragen k"onnen (egal mit welcher Technik). Im
+        Vergleich zu Nyquist: Es ist nicht m"oglich, beliebig viele diskrete
+        Stufen in einem verrauschten Kanal zu unterscheiden.
+        
+        \textbf{Rauschabstand:} $ (S/N) $ ist im vorigen Beispiel der
+        Rauschabstand, d.h. das Verh"altnis zwischen Signal und Rauschen. $ S
+        $ ist hier die Signalst"arke, und $ N $ die St"arke des Rauschens --
+        je h"oher dieser ist, desto besser f"ur die "Ubertragung. Der
+        Rauschabstand wird auch in dB (Dezibel angegeben), diese Einheit ist
+        bezeichnet den Wert von $ 10 \log_10 (S/N) $. (D.h. RA 10 = 10 db, RA
+        100 = 20 dB, RA 1000 = 30 dB)
+    \subsection*{"Ubertragungstechniken}
+      \subsubsection*{Medien}
+        \begin{itemize}
+          \item{Massenspeichermedien}
+          \item{Vedrilltes Kabelpaar/Twisted Pair (Vedrillung hilf gegen
+          St"orungen}
+          \item{Koaxialkabel, Basisband}
+          \item{Koaxialkabel, Breitband (mehrere Kan"ale, mit Verst"arkung)}
+          \item{Lichtwellenleiter/Glasfaser (s. unten)}
+          \item{Infrarot}
+          \item{Funk (Radio/Mikrowelle)}
+          \item{Satellit}
+          \item{Laser}
+        \end{itemize}
+        \textbf{Glasfasern} haben eine besonders hohe
+        "Ubertragungsrate, sie k"onnen Multimode (mehrere Frequenzen in der
+        Faser, billige LED-Technik) oder Single-Mode (nur eine Frequenz in der
+        Faser, teuer, nur Laser, bessere "Ubertragungsqualit"at sein.
+    \subsection*{Besonderheiten bei der (drahtlosen) "Ubertragung}
+      \subsubsection*{Frequenzband}
+        Radio"ubertragung: LF 148, 5 bis 283,5 kHz, MF 520 kHz bis 1605,5 kHz,
+        SW 5,9 MHz bis 26,1 MHz, UKW 87,5 bis 108 MHz. 
+       
+        Interessant: DAB 223-230, 1452-1472 MHz, dig. Fernsehen 470-862 MHz.
+        Mobiltelefon: Analog: 450-465 MHz, GSM 890-960 MHz, 1710-1880 MHz u.a.
+        (ca. 500 MHz - 2GHz). Schnurlose Telfone 1-2 GHz (DECT: 1880-1900 MHz).
+        IEEE 802.11: 2.4 GHz
+        
+        \textbf{Generell gilt:} Je h"oher die Frequenz, desto eher verh"alt sich
+        die Sendung wie Licht, und desto besser f"ur die Daten"ubertragung.
+        
+        \textbf{Dumme Frage:} Warum sind h"ohere Frequenzen besser?
+      \subsubsection*{Signalausbreitung}Eine \glqq
+        Funkzelle\grqq\ um einen Sender besteht aus dem "Ubertragungsbereich, in
+        dem kommuniziert werden kann, dem Erkennungsbereich, in dem eine Sendung
+        erkannt, aber nicht verstanden werden kann, und dem Interferenzbereich,
+        in dem eine Sendung nur noch als Hintergrundrauschen ist. Die Ausdehnung
+        dieser Bereich h"angt von verschiedenen Parametern ab.
+        
+        \textbf{D"ampfung:} Im Vakuum nimmt die Leistung des Signals im Quadrat
+        der Entfernung ab. Im wirklichen Leben wird die Ausbreitung au"serdem
+        noch von Athmosph"arischen- und Gel"andebedingungen beeinflu"st. Je
+        h"oher die Sendefrequenz, umso st"arker werden die Wellen von
+        Hindernissen absorbiert, bis hin zur v"olligen Abschattung.
+        
+        \textbf{Reflexion, Streuung, Beugung:} Ist ein Hindernis im Vergleich 
+        wesentlich gr"o"ser als die Wellenl"ange, so kann es die Wellen
+        reflektieren. An kleinen Objekten kommt es dagegen zur Streuung der
+        Wellen. Zus"atzlich kann an Kanten von Hindernissen eine Beugung
+        auftreten.
+      \subsubsection*{Mehrwegeausbreitung}
+        F"ur ein Signal (durch Streuung und Reflexion) viele verschieden lange
+        Ausbreitungspfade bis zum Empf"anger, und die Signale dieser Pfade gehen
+        zu verschiedenen Zeiten dort ein. Dadurch kann einerseits das gerade
+        gesendet Symbol \glqq verschmiert\grqq\ werden, und es kann zu "Uberlappungen mit
+        den nachfolgenden Daten kommen (ISI, Intersymbolinterferenz)
+        
+        Damit das System dies kompensieren kann, kann der Sender eine bekannte
+        Trainingssequenz senden, und der Empf"anger kann darauf seinen Entzerrer
+        entsprechend programmieren.
+      \subsubsection*{Regulierung der Frequenzen}
+        Die Frequenzen werden meist durch nationale Beh"orden (USA: FCC, Europa:
+        CEPT)
+        vergeben. Internationale Koordinierung durch ITU (International
+        Telecommunications Union) in Genf. (Unterteilung nach Region 1: Europa,
+        Mittlerer Osten, Afrika, Region 2: Amerika, Gr"onland, Region 3: Ferner
+        Osten, Australien, Neuseeland)
+    \subsection*{Modulationsverfahren}
+      \subsubsection*{Basisbandmodulation}
+        Das einfachste: Strom/kein Strom. Abgesehen von den Gleichstromanteilen
+        ist es f"ur die Funk"ubertragung auch nicht besonders geeignet.
+      \subsubsection*{Amplitudenmodulation}
+        Die Amplitude der Schwingungen (z.B. Sinusschwingungen) wird variiert.
+        Einfachster Fall: Sinus/kein Sinus. F"ur Glasfaser"ubertragung geht das
+        (Licht/kein Licht), im Funkverkehr wird diese Methode stark von
+        St"orungen beeinflusst.
+      \subsubsection*{Frequenzmodulation}
+        Die Frequenz der Schwingung wird variiert, um Daten zu "ubertragen (z.B.
+        niedrige Frequenz/hohe Frequenz). Spezielle Modulatoren k"onnen
+        Phasenspr"unge verhindern (Continuous Phase Modulation, CPM). Bei
+        Phasenspr"ungen w"urden unerw"unscht hohe Frequenzen auftreten.
+      \subsubsection*{Phasenmodulation}
+        Die Phase der Sinusschwingung wird verschoben um Daten zu codieren.
+        (z.B. Sinus normal, 180 Grad verschoben). Dieses Verfahren wird
+        besonders bei der Modemkommunikation gern angewendet.
+      \subsubsection*{Kombinationen}
+        Diese Verfahren k"onnen fast beliebig kombiniert werden, z.B. bei Modems
+        gerne Phasen- plus Amplitudenmodulation.
+      \subsubsection*{Manchester-Codierung}
+        Codierung f"ur Kabel"ubertragung. Zwar soll auch basisbandm"a"sig
+        Strom/kein Strom verwendet werden, allerdings sollen Gleichstromteile
+        vermieden werden. Deshalb gibt es in jedem Bit auf jeden Fall einen
+        "Ubergang: high->low bedeutet 1, low->high bedeutet 0 (normales
+        Manchester. Differenzielle Manchester: Anfang des Intervalls ist
+        wichtig: Ein "Ubergang bedeutet 0, kein "Ubergang bedeutet 1. 
+        Nachteil dieser Methode: Die "Ubertragungsrate wird halbiert (da
+        doppelte Frequenz ben"otigt wird).
+    \subsection*{Multiplexverfahren} 
+      \subsubsection*{Raummultiplex}
+        Niemand merkt, was auf der anderen Seite des Zimmers passiert -- oder in
+        der n"achsten Funkzelle.
+      \subsubsection*{Frequenzmultiplex}
+        Eine Frequenz pro "Ubertragung. Funktioniert prima einfach, allerdings
+        brauchen wir einen Schutzabstand zwischen den Frequenzen. Eignet sich
+        haupts"achlich f"ur dauerhaft ben"otigte Kan"ale.
+      \subsubsection*{Zeitmultiplex}
+        Jeder kommt abwechselnd dran. Die Bandbreite kann nach Bedarf neu
+        verteilt werden, allerdings ist Synchronisation erforderlich.
+      \subsubsection*{Kombiverfahren, Channel Hopping}
+        Alle Verfahren k"onnen nat"urlich auch kombiniert werden. Bei der
+        Kanalspringerei wird hat jeder Kanal bestimmte Zeitschlitze auf
+        verschiedenen Kan"alen. Das gibt es in langsam (Frequenz wird alle paar
+        Bit gewechselt) und schnell (Frequenz wird pro Bit mehrfach gewechselt).
+        Beispiel f"ur schnellen Wechsel: Bluetooth, (GSM optional). Beispiel
+        f"ur langsamen Wechsel: GSM.
+      \subsubsection*{Codemultiplex}
+        Etwas kompliziert: Alle senden gleichzeitig, und trotzdem klappt es:
+        Jede Station hat eine sogenannte Chippingsequenz (typischerweise 64 oder
+        128 bit, oder 1000 bei der Army). Die Sequenzen der Stationen sollten
+        orthogonal zueinander sein.
+        
+        Bei der "Ubertragung hat ein Bit genau die L"ange der Chippingsequenz
+        und wird mit dieser per XOR verkn"upft (bzw.: F"ur eine 0 wird die
+        Chipfolge "ubertragen, f"ur eine 1 ihr Komplement (oder auch umgekehrt).
+        Dadurch wird die ben"otigte Bandbreite multipliziert, allerdings k"onnen
+        alle Stationen im selben Frequenzbereich "ubertragen.
+        
+        Der Empf"anger mu"s mit dem Sender exakt synchronisiert sein, beim
+        Empfang wird das Produkt aus dem empfangenen Signal und der Chipfolge
+        gebildet. Signale anderer Sender werden (da sie orthogonal sind)
+        \glqq herausgek"urzt\grqq . Einzelne falsch empfangene Chips werden
+        ausgeglichen, da das Produkt durch einzelne Fehler nur leicht
+        verf"alscht wird.
+    \subsection*{PCM und SONET}
+      PCM: Standardverfahren f"ur die Telefonie. Es werden 8k Abtastungen pro
+      Sekunde gemacht, laut Nyquist genug f"ur einen 4kHz-Kanal. Jede Abtastung
+      liefert 7 Bit, eine Abtastung erfolgt alle 125 $\mu$S. Zeitintervalle in
+      TK-Einrichtungen sind daher meist Vielfache von 125 $\mu$S.
+      
+      Die Telefongesellschaften benutzen als kleinste Einheit den
+      \textbf{T1-Tr"ager}. Es werden 24 Kan"ale "ubertragen, und zwar in
+      Einheiten von 193 Bit/s (1,544 MBit/s). Jeder Kanal hat pro Block 8 Bit, 7
+      f"ur Daten, 1 Bit f"ur Steuerung. 1 Bit dient der Rahmenbildung
+      (abwechselnd 0/1). Die CCITT-Empfehlung schl"agt vor, 8 Bit f"ur Daten zz
+      verwenden. Entweder wird ein zus"atzliches Zeichengabebit am Rahmen
+      angeh"angt, oder jeder 6 Sample entha"lt ein Zeichengabebit (d.h. jeder 6
+      Sample enth"alt nur 7 Bit Daten). Die 24 Kan"ale werden meist reihum
+      abgetastet. 
+      
+      Man kann in PCM-Kan"alen zus"atzlich differenzielle oder pr"adiktive
+      Codierung verwenden (codiere Abstand zum vorherigen und vorhergesagten
+      Wert), um die Bitmenge zu verkleiner.
+      
+      \textbf{SONET} (Syncronous Optical Network) ist ein Standard f"ur optische
+      "Ubertragungsnetze. SONET besteht aus einer kompletten Architektur:
+      Multiplexer und Repeater. Die Daten werden "uber einen \textit{Pfad} vom
+      Start bis zum Ziel geleitet. Die Strecke dazwischen besteht aus mehreren
+      \textit{Leitungen} (zwischen verschiedenen Multiplexern, die aus
+      \textit{Abschnitten} (zwischen Multiplexern und Repeatern) bestehen. SONET
+      wird von einem Mastertakt einer Genauigkeit von $ 10^9 $ gesteuert.
+      
+      Ein SONET-Block besteht aus 810 byte und es werde 8000 pro Sekunde
+      "ubertragen. Die 810 byte k"onnen in einer 9 $ \times $ 90 Tabelle
+      dargestellt werden. Die ersten 3 Spalten sind f"ur Leitungs- und
+      Abschnittsoverhead reserviert (3 Zeilen Leitung, 6 Zeilen Abschnitt). Ein
+      SPE-Block (Synchronous Payload Envelope) ist 87 byte lang, das erste Byte
+      enth"alt Pfadoverhead. Er kann an einer beliebigen Stelle im Rahmen
+      beginnen, das erste Byte im Abschnittsoverhead enth"alt einen Zeiger auf
+      den Anfang. Die Datenrate betr"agt 51,84 Mbps brutto, und 50,112 Mbps
+      netto.
+    \subsection*{Repeater}
+      Ein Repeater verbindet Netzwerke auf der Bit"ubertragungschicht. Er ist
+      zwar aufwendiger als ein reiner Verst"arker, indem er digitale Signale
+      decodiert und reproduziert, wei"s jedoch nichts von der Semantik der
+      Daten.
+  \section{Sicherungsschicht}
+    Die Sicherungsschicht hat die Aufgabe, eine zuverl"assige (gesicherte)
+    Verbindung zwischen zwei benachbarten Kommunikationspartnern herzustellen.
+    
+    Die Sicherungsschicht kann der Vermittlungsschicht verschiedene Dienstg"uten
+    anbieten: Verbindungslos (best"atigt oder unbest"atigt) und
+    verbindungsorientiert.
+    \subsection*{Rahmenbildung}
+      Die Vermittlungsschicht mu"s in jedem Fall die Daten irgendwie verpacken.
+      Daher ist es notwendig, den kontinuierlichen Bitstrom, den Schicht 1 zur
+      Verf"ugung stellt, aufzuteilen. Es gibt mehrer M"oglichkeiten, Rahmen zu
+      erzeugen:
+      
+      Am simpelsten ist die Methode, die eingegangenen Bytes abzuz"ahlen,
+      m"oglicherweise wird am Anfang des Rahmens jeweils noch dessen L"ange
+      eingef"ugt. Diese Methode versagt jedoch bei Byteverlusten, oder wenn die
+      L"ange des Rahmens falsch "ubertragen wird. Besser ist es, Anfang und Ende
+      eines Rahmens irgendwie zu markieren: Beim 
+      \textbf{Zeichenstopfen} wird Anfang und
+      Ende des Rahmens durch eine bestimmte Zeichenkombination markiert. Kommt
+      ein Markierungszeichen in den Daten vor, so wird es \glqq escaped \grqq\
+      (z.B. verdoppelt). Die Escape-Codes werden dann beim Empf"anger wieder
+      entfernt. Beim \textbf{Bitstopfen} wird eine bestimmte Bitkombination als
+      Zeichengrenze eingef"ugt. Kommt diese Kombination in den Daten vor, so
+      wird ein zus"atzliches Bit \glqq eingestopft \grqq , das beim Empf"anger
+      wieder entfernt wird.
+      
+      Eine weitere Methode, Rahmen zu bilden ist die \textbf{Coderegeln der
+      Bit"ubertragungsschicht zu verletzen}. z.B. w"urde bei der
+      Manchester-Codierung in der Mitte eines Bit kein "Ubergang stattfinden.
+    \subsection*{Fehlererkennung/-korrektur}
+      Fehlererkennung und -korrektur beruht auf dem absichtlichen Einf"ugen von
+      Redundanz in die Daten.
+      \subsubsection*{Hamming-Abstand}
+        Die Hamming-Distanz zweier Bitfolgen ist die Zahl der Bits, die
+        ge"andert werden m"ussen um die eine Folge in die andere zu verwandeln.
+        Dieser Abstand gibt auch an, wie viele Bits ver"andert werden m"ussen,
+        damit die beiden Folgen nicht mehr unterscheidbar sind.
+      \subsection*{Parit"atsbit}
+        Sollte klar sein.
+      \subsubsection*{Hamming-Code}
+        Damit n-bit-Fehler erkannt werden k"onnen m"u"s die Hamming-Distanz
+        mindestens $ n + 1 $ betragen (damit der Abstand zum n"achsten g"ultigen
+        Codewort gr"o"ser ist, als der Fehler. Entsprechend mu"s f"ur n-bit
+        Fehlererkennung der Abstand mindestens $ 2n + 1 $ betragen.
+        
+        Der Hammingcode kann 1-bit-Fehler mit einer minimalen Anzahl von
+        Pr"ufbits korrigieren. Dazu werden alle bits Positionen einer
+        Zweierpotenz liegen Pr"ufbits. Die Pr"ufbits enthalten die Parit"at
+        aller bits, die die entsprechende Zweierpotenz in ihrer Zerlegung
+        enthalten (Bsp. 17 -> Pr"ufbits 16 + 1).
+        
+        Bei einem Bitfehler werden die Werte aller Pr"ufbits, die falsch sind,
+        addiert um die Position des falschen Bits zu erhalten.
+      \subsubsection*{CRC Pr"ufsummen}
+        Meist m"ochte man Fehler nicht korrigieren (zu hoher Overhead), sondern
+        lediglich erkennen. Beim CRC werden die Daten als Polinom aufgefasst,
+        das die Koeffizienten 0 und 1 hat. Au"serdem wird ein Pr"ufpolinom 
+        $ G(x) $ vereinbart, das beiden Parteien bekannt sein mu"s. Hat das
+        Pr"ufpolynom den Grad $ r $, so werden $ r $ Pr"ufbits angeh"angt. Diese
+        enthalten den Rest der Division des Datenpolynoms und $ G(x) $. 
+        Das Ergebnis l"a"st sich ohne Rest durch $ G(x) $ teilen, bleibt ein
+        Rest bei der "Uberpr"ufung, liegt ein Fehler vor.
+    \subsection*{Flusskontrolle}
+      Die Flusskontrolle soll verhindern, da"s der Empf"anger von Daten
+      "uberschwemmt wird, die er nicht annehmen kann. Au"serdem sollen diese
+      Protokolle den Verlust und die Duplizierung von Rahmen verhindern.
+      \subsubsection*{Stop-and-Wait}
+        Ganz einfach: Der Sender wartet vor jedem neuen Rahmen auf die
+        Best"atigung des vorhergehenden. Es wird eine 1-Bit Sequenznummer
+        verwendet, um den Verlust eines Rahmens (bzw. einer Best"atigung) 
+        zu erkennen. F"ur den Fall, das etwas h"angt, gibt es Timeouts.
+      \subsubsection*{Sliding Window (Schiebefenster)}
+        Sender und Empf"anger haben jeweils ein Fenster von Paketen, die
+        ausstehen d"urfen. Ein Sliding Window der Gr"osse 1 entspricht
+        Stop-and-Wait. Alle Rahmen haben Sequenznummern, ein Fenster enspricht
+        einem Sequenznummernbereich.
+        
+        Hat der Sender ein Fenster von gr"osser 1, so kann er ohne Best"atigung
+        Rahmen senden, bis er die Grenze des Fensters erreicht hat. (Alle Rahmen
+        im Fenster m"ussen gepuffert werden). Erh"alt er eine Best"atigung f"ur
+        den ersten Rahmen, so wird das Fenster um eine Position weitergeschoben.
+        
+        Hat der Empf"anger ein Fenster gr"osser 1, so kann er Rahmen puffern,
+        die ausser der Reihe ankommen. Ein Rahmen wird nur best"atigt, wenn alle
+        vorherigen Rahmen korrekt angekommen sind. Sobald der unterste Rahmen
+        best"atigt wurde, wird das Fenster um eine Position weitergeschoben.
+        Rahmen, die au"serhalb des Fensters ankommen, werden verworfen.
+      \subsubsection*{Wiederholung von fehlerhaften Rahmen}
+        Wird ein Rahmen vom Empf"anger als fehlerhaft erkannt, oder geht er
+        verloren, so mu"s er nochmals gesendet werden. Beim
+        \textbf{Go-Back-N}-Verfahren werden, wenn der Timeout f"ur einen Rahmen
+        abl"auft, dieser Rahmen und alle nachfolgenden erneut gesendet, d.h.
+        alle Sendungen seit dem Fehler werden wiederholt. Dies entspricht einem
+        Empfangsfenster von 1. Falls der Empf"anger einen Puffer hat, kann
+        stattdessen \textbf{Selective Repeat} verwendet werden. In diesem Fall
+        wird nur der fehlerhafte Rahmen neu "ubertragen, alle anderen hat der
+        Empf"anger noch in seinem Puffer.
+        
+        Eine Optimierung ist die NACK-Nachricht, mit der der Empf"anger den
+        Sender anweist, einen bestimmten Rahmen nochmals zu senden.
+      \subsubsection*{Piggybacking}
+        Best"atigungen k"onnen auch mit Datenpaketen in die Gegenrichtung \glqq
+        mitverschickt \grqq\ werden, allerdings mu"s man abw"agen, wie lange die
+        Best"atigung auf ein Datenpaket warten soll, bevor sie alleine
+        losgeschickt wird.
+    \subsection{Sicherungsschicht-Protokolle}
+      \subsubsection*{HDLC}
+        HDLC (High Level Data Link Control) ist ein Protokoll der
+        Sicherungsschicht, das in ziemlich vielen verschiedenen Variationen
+        vorkommt. Andere Namen sind LAP und LAPD.
+        
+        Diese Protokolle sind bitorientiert, ein Rahmen wird durch die
+        Flagsequenz 01111110 an Anfang und Ende begrenzt. Die Rahmen enthalten
+        ein ein Byte grosses Adressfeld und ein ebenso grosses Steuerungsfeld.
+        Die L"ange der "Ubertragenen Daten ist variabel. Das gesamte Paket wird
+        durch eine 2-byte Pr"ufsumme gesch"utzt (CRC-Variante, die fehlerhafte
+        Flagbits erkennt).
+        
+        HDLC kennt drei Rahmentypen: Informations-, Steuerungs- und
+        unnummerierte Rahmen. Informationsrahmen enthalten eine Sequenznummer
+        und ein ACK-Nummer (die angibt, welche Sequenznummer von der Gegenstelle
+        als n"achstes erwartet wird). Ein P/F-Bit (Poll/Final) war
+        haupts"achlich f"ur pollende Terminalapplikationen gedacht. 
+        
+        Die Steuerungrahmen k"onnen verschiedene Typen haben, z.B. Best"atigung
+        (ACKNOWLEDGEMENT), Zur"uckweisung (REJECT, f"ur go-back-n), selektive
+        Zur"uckweisung (SELECTIVE REJECT, fordert selektive Wiederholung, u.ä).
+        
+        Unnummerierte Rahmen enthalten Steuerinformationen, wie z.B.
+        Verbindungsabbauw"unsche (DISC, Disconnect). Au"serdem gibt es einen UA
+        (Unnumbered Acknowledgement) Rahmen, der den letzten ausstehenden
+        Steuerrahmen best"atigt (Steuerrahmen haben keine Sequenznummer, es darf
+        immer nur ein Steuerrahmen ausstehen).
+      \subsubsection*{SLIP}
+        SLIP ist ein recht primitives Protokoll zur "Ubertragung von IP-Paketen
+        "uber serielle Leitungen (daher auch Serial Line IP). Die IP-Pakete
+        werden einfach in Rahmen eingebaut, die durch ein Flagbyte gebildet
+        werden. Das Flagbyte wird in den Daten durch eine seltsame Escapesequenz
+        umgangen, so da"s das erste Byte der Escapesequenz selbst wieder
+        gestopft werden mu"s...
+        Optimierungen in SLIP betreffen das Weglassen mehrfach vorhandener
+        Header und das inkrementelle "ubertragen Headerfeldern. 
+        
+        SLIP ist kein Internetstandard und in teilweise inkompatiblen Versionen
+        vorhanden. Es unterst"utzt nur IP, keine dynamischen Adressen, keine
+        Authentifiezierung und keinerlei Fehlerkontrolle. SLIP wird im
+        Augenblick an fast allen Stellen von PPP abgel"ost.
+      \subsubsection*{PPP}
+        PPP ist ein recht leistungsf"ahiges Protokolle f"ur
+        Punkt-zu-Punkt-Verbidungen. Die Verbindung kann authentifieziert
+        aufgebaut werden, es k"onnen fast beliebige Protokolle "uber PPP
+        "ubertragen werden und die Partner k"onnen die Parameter der Verbindung
+        dynamisch aushandeln.
+        
+        PPP ist zeichenorientiert, das Rahmenformat ist allerdings "ahnlich dem
+        HDLC-Rahmenformat. Auch PPP verwendet das Flagbyte 01111110, es wird
+        allerdings zeichengestopft, wenn es in den Daten vorkommt. Das
+        Adressfeld (11111111) und das Steuerungsfeld (00000011) haben im
+        allgemeinen feste Werte, es kann vereinbart werden, sie wegzulassen.
+        Danach folgen zwei (optional ein) Byte, die das verwendete Protokoll angeben (NCP, LCP,
+        AppleTalk, IP...). Die Daten haben eine variable L"ange (bis zu einem
+        vereibarten Maximum), die Pr"ufsumme
+        hat zwei oder vier Byte.
+        
+        \textbf{LCP}, das Link Control Protocol, dient haupts"achlich zum Auf-
+        und Abbau von PPP-Verbindungen. Mit dem LCP k"onnen
+        verbindunsspezifische Parameter (Authetifikation, Art der unterst"utzten
+        Protokolle, maximale Datenl"ange...) ausgehandelt werden.
+        
+        \textbf{NCP}, das Network Control Protocol, ist spezifisch f"ur jeden
+        unterst"utzten Protokolltyp (z.B. IP oder AppleTalk). Es dient dazu,
+        Parameter f"ur das "uber PPP betriebene Protokoll auszuhandeln. Bei IP
+        w"aren dies z.B. die IP-Adressen und die Adressen von Gateways.
+  \section*{Sicherungsschicht: MAC Teilschicht}
+    Die MAC (Medium Access Control) ist ein Teil der Sicherrungsschicht, und
+    hat die Aufgabe, den Zugriff mehrerer Kommunikationspartner auf ein
+    einzelnes Medium zu koordinieren.
+    \subsection*{ALOHA}
+      Einfach und geradeaus: Jeder sendet wann es ihm passt, wenn es eine
+      Kollision gibt: Pech gehabt. Das ganze hat eine maximale Effizienz von 10
+      Prozent. Wenn man immerhin Zeitschlitze verwendet (Slotted Aloha)
+      verdoppelt sich die Effizienz - allerdings ist dann eine Synchronisation
+      aller Stationen notwendig.
+    \subsection*{CSMA}
+      Etwas schlauer ist es, vor dem Senden das Medium abzuh"oren, um zu sehen
+      ob schon jemand sendet. Im einfachsten Fall (1-persistent CDMA) wird
+      sofort gesendet, wenn das Medium frei ist (Wahrscheinlichkeit 1). Wenn
+      eine Kollision auftritt, wartet jede Station eine zuf"allige Zeit, bevor
+      sie es noch einmal versucht. Wenn mehrere Stationen auf das Medium warten,
+      tritt auf jeden Fall eine Kollision auf. Um das zu verhindern, kann
+      etweder die Wahrscheinlichkeit gesenkt werden, mit der die Station sendet
+      (z.B. 0,5 das gesendet wird, und 0,5 das noch einen Schlitz abgewartet
+      wird -> 0.5-persistent), oder die Station wartet eine zuf"allige Zeit,
+      wenn das Medium belegt ist, und probiert es dann noch einmal
+      (nonpersistent). Dieses Verfahren hei"st Carrier Sense Multiple Access.
+    \subsection*{CSMA/CD}
+      Noch besser kann der Zugriff auf das Medium geregelt werden, wenn die
+      angeschlossenen Stationen eine Kollision sofort erkennen, und dann das
+      Medium wieder freigeben. In diesem Fall kann, wenn eine Kollision erkannt
+      wird, gleich ein neuer Versuch zur Belegung gestartet werden.
+      
+      Bei CSMA/CD besteht die "Ubertragung aus Perioden, in denen Daten
+      "ubertragen werden und Konkurrenzperioden. W"ahrend einer
+      Konkurrenzperiode versuchen verschiedene Stationen, das Medium zu belegen,
+      und erst wenn keine Kollisionen mehr auftreten, beginnt die eigentliche
+      Sendeperiode.
+      
+      Die Konkurrenzperiode kann man sich in Zeitschlitze unterteilt vorstellen,
+      die der Zeit entsprechen, die zum Erkennen einer Kollision ben"otigt
+      werden.
+      \subsubsection*{Kollisionserkennung}
+        Wenn ein Signal eine Zeit von $ \tau $
+        ben"otigt, um ein Kabel der maximalen L"ange zu durchqueren, so kann eine
+        Kollision in einer Zeit von $ 2\tau $ sicher erkannt werden. Ein
+        Senderahmen mu"s mindestens so lang sein, da"s eine Kollision
+        einwandfrei erkannt wird, d.h. er mu"s aus einer "Ubertragung der L"ange
+        $ 2\tau $ bestehen.
+        
+        Ein konkurrierender Zugriff wird daher nach ca. $ 2\tau $ abgebrochen.
+        (Dies ist der Zeitschlitz f"ur die Konkurrenzperiode).
+      \subsubsection*{Exponential Binary Backoff}
+        Dies ist eine Methode, mit der der Zugriff auf ein Medium f"ur viele
+        Stationen organisiert werden kann. Sobald das Medium nach einer Sendung
+        wieder freigegeben wird, wartet eine Station zuf"allig 
+        0 oder 1 Zeitschlitze bevor
+        sie zu senden versucht. Kommt es zu einer Kollision, wird die Anzahl der
+        Wartschlitze verdoppelt (d.h. es wird jetzt 0-3 Schlitze gewartet).
+        Diese Verdoppelung tritt nach jeder Kollision ein, solange bis eine
+        Station kollisionsfrei sendet, oder ein Maximalwert erreicht wird.
+    \subsection*{RTS/CTS, versteckte und ausgelieferte Ger"ate}
+      Kollisionserkennung l"a"st sich bei Funknetzen nicht durchf"uhren, da der
+      Sender pr"uft, ob das Medium belegt ist, Kollisionen aber beim Empf"anger
+      auftreten. Bei der Funk"ubertragung k"onnen allerdings nicht alle
+      Stationen alle anderen Stationen empfangen.
+      \subsubsection*{Versteckte Endger"ate}
+        Die Station A sendet an die Station B. Station C liegt in Reichweite von
+        B, nicht jedoch von A. Wenn nun C an B senden m"ochte pr"uft sie, ob das
+        Medium belegt ist. Da sie die Signal von A nicht empfangen kann, beginnt
+        sie zu senden. Bei B treten nun Kollisionen auf.
+      \subsubsection*{Ausgelieferte Endger"ate}
+        In der selben Situation m"ochte B an C senden, w"ahrend A mit einer
+        anderen Station kommuniziert, die au"serhalb der Reichweite von B und C
+        liegt. B findet das Medium belegt, und sendet nicht an C, obwohl die
+        Sendung von A nicht st"oren w"urde.
+      \subsubsection*{Request to send/Clear to send}
+        Diese Probleme lassen sich mit einem einfachen Mechanismus l"osen: Bevor
+        ein Rahmen gesendet wird, schickt die sendenden Station A ein RTS (Request
+        To Send) Signal. Die Empfangsstation B best"atigt dieses Signal mit CTS
+        (Clear To Send) und der Kennung der sendenden Station. Alle Stationen in
+        Reichweite des Empf"angers wissen nun, das er ein Signal von A empf"angt
+        und werden erst nach dem Ende dieser "Ubertragung wieder eine Verbindung
+        versuchen. Wenn der RTS-Rahmen kollidiert wird nur eine relativ kurze
+        "Ubertragung (der RTS-Rahmen verloren). Falls der RTS-Rahmen verlorgen
+        geht (d.h. es wird kein CTS empfangen) wird ein Backoff-Verfahren
+        angewendet.
+        
+        Dieses Verfahren erforder einen erh"ohten Overhead, so da"s es z.B. bei
+        802.11 optional ist.
+    \subsection*{Kollisionsfreie Verfahren u.a.}
+      Es ist auch m"oglich, den Zugriff auf das Medium so aufzuteilen, da"s
+      keine Kollisionen auftreten. Diese Verfahren sind allerdings nicht so
+      verbreitet wie die Kollisionbehafteten.
+      \subsubsection*{Bitmusterprotokoll}
+        Jede Station hat in der \glqq Konkurrenzphase \grqq\ ein reserviertes
+        Bit, welches gesetzt wird, wenn die Station "ubertragen m"ochte. Nach
+        dieser Phase wissen alle Stationen Bescheid, wer senden m"ochte und jede
+        Station darf der Reihe nach einen Rahmen senden.
+      \subsubsection*{Bin"arer Countdown}
+        Alle Stationen senden gleichzeitig ihre Adressen, dabei wird eine 0 von
+        1-Bits "uberschrieben. Alle Stationen, die bemerken da"s ihr Adressbit
+        "uberschrieben wurde, scheiden sofort aus (d.h. nur noch Stationen mit
+        einer 1 an der aktuellen Stelle machen weiter).
+        Am Ende gewinnt die Station mit der h"ochsten ID, die ihren Rahmen
+        senden darf.
+      \subsubsection*{Adaptive Tree Walk}
+        Noch ein etwas esoterisches Protokoll: Es beruht darauf, das die
+        Stationen in einem bin"aren Baum angeordnet sind. Wenn eine Kollision
+        auftritt, scheidet eine Seite des Baumes aus, und das Protokoll wird mit
+        dem rechten oder linken Unterbaum fortgesetzt.
+    \subsection*{Bridging}
+      Eine Bridge ist ein Ger"at, da"s zwischen zwei (oder mehr) Netzwerken auf
+      Sicherungsschicht-Ebene Vermittelt. Eine Bridge kann evtl. auch Rahmen von
+      Format des einen Netzwerk in ein anderes umwandeln (z.b 802.3 nach 802.5).
+      \subsubsection*{Transparente Bridges}
+        Eine transparente Bridge kann in ein Netzwerk eingef"ugt werden, ohne
+        da"s die Stationen davon etwas mitbekommen. Die Bridge arbeitet ohne
+        Eingriff und routet die Rahmen mit dem Backward-Learning-Verfahren (s.
+        Routing/Vermittlungsschicht).
+      \subsubsection*{Spanning Tree}
+        Falls mehrere Bridges an ein LAN angeschlossen sind, verwenden sie den
+        Spanning-Tree-Algorithmus um zu verhindern, da"s Schleifen entstehen.
+        (Daf"ur tauschen die Bridges untereinander Informationen aus). Die
+        Bridge mit der niedrigsten ID wird die Wurzel des Baumes.
+        
+        Jede Bridge kennt die Kosten eines ihrer Lan-Anschl"usse. Kennt eine
+        Bridge bereits einen g"unstigen Weg in Richtung Wurzel, sendet sie
+        dessen Kosten auf alle angeschlossenen LANs. Ein Bridge, die diese
+        Information empf"angt, w"ahlt jetzt den Nachbarn aus, "uber den der
+        optimale Pfad zur Wurzel aus. (d.h. eigene Kosten bis zum Nachbarn +
+        dessen Kosten bis zur Wurzel sind minimal). Rahmen werden von Bridges
+        jetzt nur noch entlang des Baumes weitergeleitet, ansonsten ist alles
+        wie vorher.
+        
+        Ein LAN wird seinen Verkehr immer "uber diejenige Bridge versenden, die
+        die beste Anbindung zur Wurzel hat (designated Bridge).
+      \subsubsection*{Source Routing Bridges}
+        Diese Art von Bridges verlangt, da"s die sendende Station den kompletten
+        Pfad bis zum Ziel eintr"agt. Dies macht die Arbeit der eigentlichen
+        Bridge zwar einfacher, ist aber nicht transparent. Au"serdem m"ussen
+        alle Stationen die Netztopologie kennen, was mit einem hohen Aufwand
+        (z.B. quadratisch viele Nachrichten) verbunden ist. Diese Technik wurde
+        bei Bridges f"ur 802.5 verwendet.
+    \subsection*{Spezielle MAC-Systeme}
+      \subsubsection*{802.3 (Ethernet)}
+        Ethernet hat den Vorteil simpel (und billig) zu sein, eine Eigenschaft
+        die sich durchsetzt. Ethernet arbeitet mit einem CSMA/CD-Verfahren mit
+        exponentiellem Backoff. Es gibt verschiedene Verkabelungsvarianten
+        (Thick, Thin, Twisted Pair, Glasfaser) und inzwischen auch verschiedene
+        Geschwindigkeiten. In jedem Fall kann jedoch jede angeschlossene Station
+        alle anderen h"oren, und die maximale L"ange eines Segmentes betr"agt
+        2500 Meter (wichtig f"ur die Kollisionserkennung).
+        
+        Ein Ethernet-Rahmen besteht aus einer 7-byte-Pr"aambel (01010...), die
+        zur Synchronisation dient. Dann folgt ein Startcode (10101011) als
+        Anfangsmarkierung. Die Quell- und Zieladresse haben jeweils 6 Byte
+        (m"oglich w"aren auch 2), dann folgen 2 Byte die die L"ange der Daten
+        angeben (max. 1500 Byte). Falls der Rahmen weniger als 64 Byte lang
+        w"are, wird ein Padding-Feld eingef"ugt um ihn auf diese Mindestgr"o"se
+        zu verl"angern (die Mindestgr"o"se ist erforderlich, um bei einer L"ange
+        von 2500m noch Kollisionen zu erkennen. Der Rahmen wird durch eine
+        4-byte-Pr"ufsumme (CRC) gesch"utzt. Ethernet-Adressen k"onnen lokal oder
+        global sein, die Adresse 111.... dient als Broadcastadresse.
+        
+        Der bin"are Backoff verdoppelt die Gr"o"se des Konkurrenzfensters bis zu
+        einem Maximalwert von 1023 Schlitzen, dann (nach der 10 Kollision) wird
+        die Gr"o"se eingefroren. Nach 16 Kollisionen gibt der Algorithmus auf.
+        
+        Aufgrund seiner Einfachheit hat Ethernet auch einige Nachteile: Die
+        Zustellung eines Rahmens in einer gewissen Zeit kann nicht garantiert
+        werden und es werden keine Priorit"aten unterst"utzt. Ethernet eignet
+        sich also nicht f"ur Echtzeitanwendungen. Au"serdem ist die m"ogliche
+        Auslastung unter hoher Last nicht gerade optimal.
+        
+        \textbf{Fast Ethernet} ist im Prinzip das gute alte Ethernet, nur da"s
+        der Takt der Manchester-Codierung verzehnfacht wurde und so statt 10
+        Mbit/s jetzt 100 Mbit/s "ubertragen werden k"onnen. Fast Ethernet
+        unterst"utzt nur noch die Verkabelung "uber Hubs, mit Kabel der
+        Kategorien 3 und 5 oder Glasfaser.(Kat 3 arbeitet mit vier verdrillten
+        Kabelpaaren (zum Hub, vom Hub, und zwei umschaltbare).
+        
+        \textbf{Switches} k"onnen Ethernet nochmals verbessern, indem der Switch
+        Pakete an eine bestimmte Station nur an den Ausgang dieser Station
+        kopiert. Andere Stationen werden also von dieser Kommunikation nicht
+        bel"astigt.
+      \subsubsection*{802.4 (Token Bus)}
+        Token Bus war der Versuch die Probleme des Ethernet zu l"osen und ein
+        System zu schaffen, da"s sich besonders f"ur Fertigungsstrassen eignet.
+        Token Ring ist eine unn"otig komplexe Kopfgeburt, die wohlverdient
+        untergegangen ist.
+        
+        Das Grundprinzip ist noch relativ elegant: Obwohl die Stationen
+        physikalisch an einem Bus h"angen, bilden sie einen logischen Ring. Eine
+        Station darf nur senden, wenn sie das Token besitzt und sendet es,
+        nachdem sie fertig ist an die logisch n"achste Station weiter. Dadurch
+        kommt jede Station garantiert regelm"a"sig an die Reihe. Allerdings
+        besteht jede Station aus sechs Unterstationen, die jeweils eine der
+        sechs Priorit"atsklassen bedienen. Der h"ochsten Priorit"at wird ein
+        gewisser Anteil der Bandbreite garantiert.
+        
+        Die Rahmen von Token-Ring unterscheiden sich etwas von den
+        Ethernet-Rahmen. Die Pr"aambel ist nur ein Byte lang, und jeder Rahmen
+        hat ein Start- und Endesignal das analog (!) codiert ist, deshalb mu"s
+        keine Rahmenl"ange "ubertragen werden.
+        
+        Die Probleme von Token Ring fangen richtig an, wenn zus"atzliche
+        Stationen eingef"ugt werden m"ussen. Jede Station kann bietet, wenn sie
+        das Toke hat, anderen Stationen (und zwar nur solchen, die nach ihr in
+        den Ring einf"ugt werden k"onnen) an, ihr Nachfolger zu werden. Wenn
+        sich mehrere Stationen melden, treten Kollisionen auf, und die
+        urspr"ungliche Station versucht dies zu beheben. Die genaue Zeit, um in
+        den Ring einzutreten, l"a"st sich nicht vorhersagen.
+        
+        Werden beide Nachfolgestationen einer Station abgeschaltet (d.h. sind
+        pl"otzlich nicht erreichbar, mu"s der Ring neu initialisiert werden.
+        
+        Token Ring untest"utzt bis zum 10 MBit/s.
+      \subsubsection*{802.5 (Token Ring)}
+        Der Grundgedanke von Token Ring ist derselbe wie beim Token Bus: Nur die
+        Station, die gerade das Token besitzt, darf senden. Der auff"alligste
+        Unterschied besteht darin, da"s ein Token Ring auch physikalisch als
+        Ring organisiert ist, d.h. eine Station kommuniziert nur mit ihren
+        unmittelbaren Nachbarn direkt. Jede Station hat eine Ein- und eine
+        Ausgangsschnittstelle. Normalerweise sind die Stationen
+        miteinander "uber ein \textit{Wire Center} verbunden, das eine
+        ausgefallenen oder unterbrochene Station "uberbr"ucken kann.
+        
+        Eine Station kopiert im Normalfall (Lesebetrieb) alle Daten von ihrer
+        Eingangschnittstelle mit einer 1-Bit Verz"ogerung auf ihre
+        Ausgangschnittstelle. Falls die Station das Schreibrecht hat, werden
+        Ein- und Ausgang entkoppelt, die Station sendet auf ihrem Ausgang Daten
+        und leitet die Daten, die sie auf dem Eingang erh"alt, nicht weiter.
+        
+        Im Ruhezustand kreist auf dem Ring ein 3 Byte langes Token, das von den
+        Stationen weitergegeben wird. Der Ring mu"s mindestens so lang sein,
+        da"s das komplette Token auf ihm Platz findet, ist dies nicht der Fall,
+        wird eine zus"atzliche Verz"ogerung eingef"ugt. Sobald eine Station
+        senden will, wartet sie auf das Token, "andert ein Bit um es zu einer
+        normalen Startfolge zu machen und sendet dann den Rest des Rahmens. Die
+        Station darf jetzt bis zu einer maximalen Tokenhaltezeit Rahmen senden,
+        sobald sie fertig ist, erzeugt sie ein neues Token und geht zur"uck in
+        den Lesebetrieb.
+        
+        Ein Token-Ring-Rahmen besteht aus eine Start- und einem Endebegrenzer
+        von einem Byte die ung"ultige Manchester-Folgen enthalten um sie von
+        Daten zu unterscheiden. Nach dem Endebegrenzer folgt noch ein
+        Rahmenstatusbyte, in dem die Empfangstation Best"atigungen bzw. den
+        "Ubertragungsstatus eintragen kann. Der Kopf des Rahmens besteht au"ser
+        aus dem Startbegrenzer aus einem Zugriffsteuerungsbyte, da"s Bits f"ur
+        Reservierung, Priorit"aten und "Uberwachungszwecke enth"alt. Das
+        Rahmensteurungsbyte codiert verschiedene Arten von "Uberwachungsrahmen.
+        Der Rest des Token-Ring Rahmens besteht aus Start- und Zieladresse, der
+        Checksumme und den Daten, die hier beliebig lang sein d"urfen.
+        
+        Token Ring unterst"utzt drei \textbf{Priorit"aten}, 
+        eine Station darf nur senden
+        wenn sie ein Token gleich oder kleiner der anstehenden Priorit"at
+        erh"alt. Eine Station kann ein Reservierungsbit setzen, um ein Token
+        einer gewissen Priorit"at anzufordern, eine Reservierung mit hoher
+        Priorit"at hat dabei Vorrang. Es gibt einige Mechanismen, die erreichen
+        sollen, da"s die Priorit"at nach der "Ubertragung auch wieder
+        heruntergesetzt wird, allerdings kann es vorkommen da"s eine Station mit
+        niedriger Priorit"at verhungert.
+        
+        Eine \textbf{Monitorstation} "ubernimmt in Token Ring die
+        Administrationsaufgaben, f"ugt Verz"ogerungen ein falls notwendig,
+        entfernt kreisende Rahmen ohne Heimat und sonstigen M"ull vom Ring und
+        "ahnliches. Jede Station kann potentiell der Monitor des Rings sein,
+        beim Ausfall des Monitors "ubernimmt eine andere Station diesen Job. Es
+        kann nat"urlich vorkommen, da"s der Monitor eine Fehlfunktion hat und
+        damit das Netz zum Erliegen bringt (Anh"anger von Token Bus glauben
+        daher, ihr System w"are zuverl"assiger...).
+        
+        Token Ring unterst"utzt bis zum 8(16) MBit/s.
+      \subsubsection*{802.11 (Wireless LAN)}
+        802.11 ist ein neues Miglied in der 802.x-Familie zum Aufbau von
+        drahtlosen Netzwerken. Naturgem"a"s ist es etwas komplizierter als die
+        drahtgebundenen Protokolle: 802.11 unterst"utzt verschiedene
+        "Ubertragungsarten, verschiedene MAC-Zugriffsverfahren, Stromsparmodi
+        und Roaming.
+        
+        Die \textbf{"Ubertragungsarten}, die unsterst"utzt werden sind eine
+        Funk"ubertragung mit Frequenzsprungverfahren, eine Funk"ubertragung mit
+        DSSS (Direct Sequence Spread Spectrum) und Infrarot"ubertragung. Es
+        wird eine "Ubertragungsgeschwindigkeit von 1 MBit/s unterst"utzt,
+        optional 2 MBit/s, moderne Varianten unterst"utzen auch 11 MBit/s. Die
+        \textbf{Infrarot"ubertragung} hat dabei nur eine Reichweite von ca. 10
+        Metern, und setzt keine direkte Sichtverbindung voraus. Die
+        Funkbasierten Verfahren arbeiten im lizenfreien Bereich um 2,4 GHz und
+        haben eine Reichweite im Bereich um 50m (in Geb"auden). Die
+        "Ubertragungstechniken haben jeweils eigene Paketformate f"ur die
+        physikalische Schicht. Alle drei Verfahren bieten ein CCA (Clear Channel
+        Assement) Signal an, das angibt ob das Medium frei ist. Bei beiden
+        Funkverfahren werden die Daten mit einem Polynom zerw"urfelt
+        (scrambling), um Gleichstromanteile zu vermeiden und das Signal zu
+        gl"atten.
+        
+        Ein Verfahren zur Funk"ubertragung ist ein 
+        \textbf{Frequenzsprungverfahren}. Die Daten werden mit einer
+        Gausschen Frequenzmodulation codiert, es werden 2 (1 MBit/s) bzw. 4 (2
+        MBit/s) Frequenzen benutzt. Die Station wechselt die Kan"ale mit einer
+        pseudozuf"alligen Sprungsequenz, so da"s mehrere Netzwerke im gleichen
+        Raum betrieben werden k"onnen. Es stehen 79 Kan"ale (Japan: 23) zur
+        Verf"ugung. Das Paket dieser Schicht besteht aus einer Pr"aambel (80 bit
+        Synchronisation und 2 Startbyte), einer L"angenangabe f"ur die Folgenden
+        Nutzdaten (12 Bit), einem 4-bit Steuerungscode der die Datenrate der
+        Nutzdaten angibt (der Header wird immer bei 1 MBit/s "ubertragen) und
+        einer 4 byte langen Checksumme. Danach folgen die Nutzdaten.
+        
+        Das am weitesten verbreitete Verfahren ist allerdings \textbf{DSSS}.
+        Hier werden die Daten per Phasenmodulation "ubertragen (Modulation je
+        nach "Ubertragungsrate), und das Signal wird mit einem 11 Bit langen
+        Barker-Code gespreitzt.  Dieses Verfahren ist stabiler, erforder
+        allerdings auch leistungsf"ahigere Sender und Empf"anger. Eine neue
+        Variante des DSSS-Verfahren kann bereits Datenraten von 11 MBit/s
+        "ubertragen. Der Datenrahmen der DSSS-Schicht unterscheidet sich nur
+        unwesentlich von dem beim Frequenzsprungverfahren. Es gibt wieder eine
+        Pr"aambel (diesmal mit 128 Bit Synchronisationsmuster) und Felder f"ur
+        die L"ange der Daten, die "Ubertragungsgeschwindigkeit und eine
+        Pr"ufsumme. Zus"atzlich ist ein Feld f"ur sp"atere Verwendung
+        hinzugekommen, da"s f"ur weitere Dienste verwendet werden soll. Die
+        Felder haben teilweise etwas andere L"angen als beim
+        Frequenzsprungverfahren.
+        
+        Die \textbf{MAC-Schicht} in 802.11 unterst"utzt wiederum verschiedene
+        Verfahren: Ein CSMA/CA-Verfahren f"ur ad-hoc Netzwerke, ein optionales
+        Verfahren mit RTS/CTS und ein kollisionsfreies Polling-Verfahren mit
+        einer Masterstation. Die Verfahren verwenden drei verschiedene
+        Wartezeiten, eine sehr kurze (SIFS) zum Kollisionsfreien Versenden von
+        Best"atigungen u."a., eine mittler f"ur den privilegierten Zugriffe 
+        (PIFS) der Masterstation und eine lange Wartezeit (DIFS) 
+        f"ur konkurrierenden Zugriff. 
+        
+        Beim \textbf{CSMA/CA-Verfahren} pr"uft eine Station zuerst (mit dem
+        CCA-Signal), ob das Medium belegt ist. Ist es f"ur mindestens die Zeit
+        von DIFS frei, kann sie sofort zu senden beginnen. Ist das Medium
+        belegt, m"ussen alle Stationen die senden wollen zun"achst eine Zeit von
+        DIFS abwarten. Ist das Medium dann immer noch frei, treten sie in eine
+        Konkurrenzperiode ein: Jede Station w"ahlt eine zuf"allige Zahl, und
+        wartet nach DIFS noch entsprechend viele Zeitschlitze ab. Beginnt vorher
+        eine andere Station zu senden, bricht sie ihren Versuch ab. Beginnen
+        zwei Station im selben Zeitschlitz, kommt es zu einer Kollision.
+        Stationen, die ihren Versuch abgebrochen haben, m"ussen nur noch die
+        \glqq Restzeit\grqq\ abwarten, bis sie es wieder versuchen k"onnen.
+        Falls Kollisionen auftreten, wird wieder ein exponentielles
+        Backoff-Verfahren verwendet: Die Anzahl der Zeitschlitze ist minimal 7,
+        nach jeder Kollision wird sie bis zu einem Maximalwert von 256
+        verdoppelt. Ein Paket wird vom Empf"anger sofort best"atigt, die
+        Wartezeit bis zum Senden der Best"atigung betr"agt nur SIFS, so da"s die
+        Best"atigung in jedem Fall Kollisionsfrei versendete wird. 
+        
+        CSMA/CD kann mit einem
+        \textbf{RTS/CTS}-Mechanismus kombiniert werden. Jede Station mu"s diesen
+        Mechanismus unterst"utzen, aber die Anwendung ist optional: RTS/CTS
+        erzeugt eine Menge zus"atzlicher Nachrichten, und kann oft weggelassen
+        werden. Wenn eine Station den Mechanismus anwenden will, sendet sie (im
+        normalen Konkurrenzverfahren einen RTS-Rahmen, der die Adresse des
+        Empf"angers und die L"ange der Daten"ubertragung enth"alt. Alle
+        Stationen, die diesen Rahmen h"oren passen ihren NAV (Net Allocation
+        Vector) an, und werden das Medium f"ur die vorgegebene Zeit nicht
+        belegen. Der Empf"anger sendet dann (nach SIFS) ein CTS-Signal, alle
+        Stationen die dieses h"oren passen ihren NAV ebenfalls (neu) an. Danach
+        erfolg die Sendung, die von keiner anderen Station unterbrochen wird.
+        802.11 unterst"utzt auch ein \textbf{Fragmentierungsverfahren} (damit
+        nicht zu gro"se Bl"ocke "ubertragen werden. In diesem Fall enth"alt die
+        Best"atigung eines Fragmentes gleichzeitig die Reservierung des Netzes
+        f"ur das n"achste Paket.
+        
+        Das \textbf{Polling-Verfahren} teilt die Zeit in sogenannte Superrahmen
+        ein, die aus einer Polling-Phase und einer Konkurrenzphase bestehen
+        (diese funktioniert mit CSMA/CD). Da die Konkurrenzphase das Polling
+        verz"ogern kann, kann sie auch ganz weggelassen werden. Beim Polling
+        fragt die Masterstation (nach PIFS, also bevor jemand anderes drankommt)
+        die einzelnen Stationen ab, und diese k"onnen auf die Abfrage mit ihren
+        Daten (nach SIFS) antworten. Darauf fragt die Masterstation (nach SIFS)
+        die n"achste Station ab. Die Masterstation zeigt den Beginn der
+        Konkurrenz mit einem bestimmten Signal (Contention Free End) an.
+        
+        Der \textbf{MAC-Rahmen} von 802.11 enth"alt Kontrollinformationen, eine
+        Sequenznummer, Daten "uber die Dauer der "Ubertragung (f"ur die
+        RTS/CTS-Reservierung), Daten (bis 2312 bit) und 4 Adressen. Diese dienen
+        zur Unterst"utzung des Roaming. Wenn die Stationen untereinander
+        kommunizieren, enthalten zwei der Adressfelder die benutzten Adressen,
+        das dritte die Adresse des Netzwerkes (BSSID Basic Service Set
+        Identifier). Werden Daten "uber einen Zugangspunkt versandt, ist sowohl
+        die physikalische Adresse des Zugangspunktes als auch die logische
+        Adresse des Partners enthalten.
+        
+        Wichtig f"ur die Stromsparmodi ist eine genaue
+        \textbf{Zeitsynchronisation}. Zu diesem Zweck sendet die Masterstation
+        (falls vorhanden) in regelm"assigen Abst"anden ein Timestamp-Paket
+        (Beacon) aus.
+        Falls es sich um ein Ad-Hoc-Netzwerk handelt, wird jede Station zum
+        vorgesehenen Zeitpunkt versuchen ein Beacon zu senden, auf das
+        sich die anderen synchronisieren. Die Pakete werden immer m"oglichst
+        nah am vorgesehenen Zeitpunkt gesendet. Verschiebt sich ein
+        Timestamp-Paket, verschieben sich die nachfolgenden nicht.
+        
+        Um \textbf{Strom zu sparen} kann sich eine 802.11-Station vor"ubergehend
+        abschalten. Andere Stationen m"ussen dann die Daten speichern, bis sie
+        wieder erwacht. Gibt es eine Masterstation, "ubernimmt diese das
+        Zwischenspeichern der Daten. Die anderen wachen regelm"a"sig auf, um das
+        Beacon zu h"oren. Zusammen mit dem Beacon wird auch eine Traffic
+        Idenfication Map gesendet, die angibt f"ur welche Stationen Daten
+        vorliegen. Diese bleiben dann wach. In einem Ad-Hoc-Netzwerk "ubertr"agt
+        jede Station die senden will eine (A)TIM, die entsprechende Station
+        bleibt dann wach. Dies skaliert schlecht, da bei einem vollen Netz sehr
+        viele Tabellen "ubertragen werden.
+      \subsubsection*{802.6 DQDB}
+        Distributed Queue Dual Bus: Ein Protokoll f"ur MANs (ungef"ahr die
+        Gr"osse einer Stadt). Die Besonderheit ist, da"s es zwei unidirektionale
+        Leitungen gibt, auf denen die Pakete weitergereicht werden. Die Station
+        sind als dezentrale FIFO-Warteschlange reserviert: Eine Station kann die
+        anderen zwingen, ihr einen Rahmenschlitz zur reservieren indem sie in
+        der Gegenrichtung ein Reservierungsbit setzt.
+      \subsubsection*{802.2 LLC f"ur 802.x}
+        802.x sieht keine Best"atigungen oder zuverl"assige Verbindungen vor.
+        802.2 definiert daher ein einheitliches LLC (Logical Link Control)
+        Protokoll, das einen einheitlichen LLC-Rahmen f"ur alle 802.x-Netzwerke
+        vorsieht. Dies ist eine Teilschicht oberhalb der MAC-Schicht. LLC bietet
+        best"atigten und unbest"atigten Datagrammdienst und einen
+        verbindungsorientierten Dienst.
+      \subsubsection*{FDDI}
+        Fiber Distributed Data Interface - ist im Prinzip ein Token Ring auf
+        Glasfaserbasis mit einer Geschwindigkeit von 100 MBit/s. Es benutzt
+        allerdings eine Priorit"atsregelung "ahnlich von Token Bus: Solange das
+        Token voraus ist, d"urfen alle senden, ansonsten nur die hohen
+        Priorit"aten. FDDI braucht eine lange Pr"aambel zur Synchronisation, da
+        es nicht Manchester-codiert.
+      \subsubsection*{HIPPI}
+        High Performance Parallel Interface - Eine
+        Supercomputer-Verbindungschnittstelle mit 800 MBit/s. Das ganze
+        funktionierte schon in den 80er Jahren mit einem Kabel mit 50
+        verdrillten Kabelpaaren, davon eines in jede Richtung. Will man die
+        doppelte Bandbreite, nimmt man vier Kabel. Das ganze funktioniert
+        immerhin auf 25m und wurde so eine Art Industriestandard bei
+        Supercomputern.
+      \subsubsection*{Fiber Channel}
+        Der designierte Nachfolger von HIPPI auf Glasfaserbasis. Kommt komplett
+        mit einem Kann-Alles-Gewinnt-Immer-Protokoll und bis zu 800 Mbit/s.
+  \section{Vermittlungsschicht}
+    Die Vermittlungsschicht (Network Layer) hat die Aufgabe, Pakete zwischen
+    zwei Kommunikationspartnern zu "ubertragen, und zwar auch "uber
+    zwischengeschaltete Router o."a. Dies ist die erste Ende-zu-Ende Schicht.
+    Auch wenn IP (die Internet-Vermittlungsschicht mit Paketen arbeitet, kann
+    eine Vermittlungsschicht (wie bei ATM) auch zuverl"assige und/oder
+    verbindungsorientierte Dienste anbiete.
+    \subsection*{Routing}
+      Dies ist eine der Hauptaufgaben der Vermittlungsschicht: Eine Route vom
+      Sender bis zum Empf"anger zu finden. Allgemein kann man das Netz als
+      Graphen auffassen, bei dem die Knoten (=Router) "uber die Kanten
+      Informationen austauschen. Jede Kante hat ein Gewicht, das die Entfernung
+      zwischen den Routern sein kann oder die Antwortzeit oder sonst etwas
+      sinnvolles. Kennt man den gesamten Graphen, ist es m"oglich eine optimale
+      Route von einem Knoten zu berechnen (z.B. mit Dykstra's Algorithmus).
+      Allerdings wei"s nicht immer jeder Router "uber alles bescheid, und die
+      Toplogie des Netzes "andert sich oft. (Es ist auch m"oglich, statt einer
+      einzelnen Route die Leistung des ganzen Netzes zu optimieren, wenn man den
+      "ublichen Verkehrsflu"s kenn: \textbf{Flu"sbasiertes Routing})
+      
+      Also mu"s man ein Verfahren finden, mit dem jeder Router erf"ahrt, was zu
+      tun ist wenn ein Paket empfangen wird.
+      \subsubsection*{Flooding}
+        Dieser Mechanismus hat den Vorteil, da"s er immer funktioniert, ist aber
+        nicht sehr effizient: Wenn ein Router ein Paket erh"alt, wird es auf
+        allen Leitungen wieder ausgegeben, au"ser der, auf der es gekommen ist.
+        Die Pakete m"ussen mindestens eine vorgegebene Lebensdauer haben (z.B.
+        maximalen Hop-Count), damit keine endlos kreisenden Pakete entstehen.
+      \subsubsection*{Backward Learning}
+        Flooding leidet darunter, da"s es einen Haufen unn"otiger Pakete
+        erzeugt. Beim Backward Learning (z.B. bei Bridges eingesetzt), verwendet
+        der Router Flooding, falls er den Weg zu einem Ziel nicht kennt.
+        Au"serdem wird die Ursprungsadresse des Paketes untersucht: Die Leitung,
+        auf der es ankam ist offensichtlich der richtige Weg zum entsprechenden
+        Subnetz. Auf diese Weise baut sich der Router (oder die Bridge) eine
+        Tabelle auf, die Eintr"age haben nur eine gewisse Lebensdauer damit auch
+        auf "Anderungen der Topologie reagiert werden kann.
+        
+        Backward Learning funktioniert nur, wenn es keine Schleifen in der
+        Topologie gibt.
+      \subsubsection*{Hot Potato}
+        Ein besonders lustiges Verfahren: Wir versuchen das Paket m"oglichst
+        schnell wieder los zu werden und stellen es in den Ausgang mit der
+        k"urzesten Warteschlange.
+      \subsubsection*{Statisches Routing}
+        Die Routingtabellen werden an den Routern von Hand eingestellt.
+        Funktioniert prima, solange die Hierarchie sich nicht "andert.
+      \subsubsection*{Zentralisiertes- und Delta Routing}
+        Man kann eine zentrales Routing Control Center einrichten, da"s alle
+        Routingentscheidungen trifft. Es mu"s einen Gesamt"uberblick "uber das
+        Netz haben (etwa indem es Statusmeldungen von allen Stationen
+        einsammelt), berechnet f"ur jeden Router die Routingtabelle und schickt
+        sie ihm. Das Routing Control Center darf nie ausfallen und mu"s
+        ausreichend leistungsf"ahig sein.
+        
+        Beim Delta Routing bestimmt das Kontrollzentrum "aquivalente Routen in
+        der Routingtabelle (d.h. Routen, die sich nur um maximal ein Delta
+        unterscheiden). Der Router darf dann selbst entscheiden, welchen der
+        "aquivalenten Ausg"ange er benutzen will.
+      \subsubsection*{Distance Vektor Routing}
+        Ein dynamisches Verfahren, bei dem jeder Router nur "uber seine
+        Nachbarschaft bescheid wei"s. Jeder Router wei"s, zu welchen Kosten er
+        einen anderen Router (am Anfang seine Nachbarn) erreichen kann. Diese
+        Information teil er seinen Nachbarn mit. Merkt jetzt z.B. Router A, da"s
+        sein Nachbar B den Router C mit 1 Hops erreichen kann, wei"s A da"s er C
+        mit 2 Hops erreichen kann (indem er das Paket an B sendet). Diese
+        Information teilt er wieder seinen Nachbarn mit.
+        
+        F"allt allerdings C aus, so kann B ihn nicht mehr direkt erreichen. B
+        wei"s aber, das A behauptet C in 2 Hops erreichen zu k"onnen. Also
+        glaubt B, es k"onne C "uber A in 3 Hops erreichen. Wenn A dies h"ort,
+        glaubt es C "uber B in 4 Hops erreichen zu k"onnen, und so weiter.
+        (\textbf{Count-To-Infinity-Problem}). Es gibt einige Optimierungen, die
+        dieses Problem mildern sollen (z.B. Split Horizon: Der Router schickt
+        die Entfernungsinformationen nicht auf die Leitung, mit der er den
+        entsprechenden Partner erreicht), diese Hacks funktionieren aber alle
+        nicht zuverl"assig. Das Border Gateway Protokoll vermeidet jedoch das
+        Problem, indem komplette Pfade "ubertragen werden.
+      \subsubsection*{Destination Sequence Distance Vektor Routing}
+        Eine Variante des Distance Vektor Routing, die f"ur mobile ad-hoc-Netze
+        gedacht ist. Das Problem dort ist, das die Topologie sich schnell
+        "andert, und sich das Routing schnell anpassen mu"s. Insbesondere
+        count-to-infinity ist hier absolut t"odlich.
+        
+        Diese Variante verwendet zus"atzlich eine Sequenznummer f"ur jede
+        gesendete Routinginformation (um Schleifenbildung zu vermeiden), 
+        und merkt sich deren Alter. "Anderungen werden erst nach einer kurzen
+        Bedenkzeit verwendet, um kurzfristige Schwankungen auszugleichen.
+      \subsubsection*{Dynamic Source Routing}
+        Ein weiteres Verfahren f"ur mobile ad-hoc-Netze. Das eigentliche Routing
+        entspricht dem bei den Bridges erkl"arten Source Routing: Jeder Sender
+        schickt den kompletten Pfad bis zum Ziel in seiner Nachricht. Allerdings
+        wird hier nicht die komplette Netztopologie ausgetauscht, sondern ein
+        Knoten versucht nur einen Pfad zu finden, wenn er etwas zu senden hat.
+        
+        Kennt der Sender den ben"otigten Pfad noch nicht, so wird die Nachricht
+        geflutet, und jeder Router h"angt seine Adresse an das Paket an. Der
+        Empf"anger erh"alt dann Pakete mit kompletten Pfadangaben, kann den
+        g"unstigsten aussuchen und mit der Best"atigung an der Sender
+        zur"uckschicken. 
+        
+        Dieses Verfahren hat den Vorteil, nicht st"andig Routinginformationen
+        auszutauschen. Es wird aber problematisch in hochdynamischen Umgebungen
+        in denen sich die Pfade immer "andern, und wenn die Verbindungen
+        zwischen zwei Knoten nicht symmetrisch sind.
+      \subsubsection*{Link State Routing}
+        Hier sammelt jeder Router Informationen "uber die Verbindungen zu seinen
+        Nachbarn und stellt diese in einem Link-State-Paket zusammen. Diese
+        Pakete werden dann (z.B. per Flooding) an alle anderen Router verteilt.
+        Die Link-State-Pakete haben (zur Vermeidung von Zweideutigkeiten) eine
+        Sequenznummer (um die richtige Reihenfolge festzustellen) und eine
+        maximale Lebensdauer (die heruntergez"ahlt wird, damit z.B. nicht ewig
+        Pakete mit niedriger Sequenznummer nach einem Neustart verworfen
+        werden).
+        
+        Hat ein Router die Link-State-Pakete von allen anderen Routern erhalten,
+        kann (z.B. mit Dijkstras Algorithmus) die optimalen Routen berechnen.
+      \subsubsection*{Hierachisches Routing}
+        Um die Routingentscheidungen nich endlos komplex werden zu lassen, kann
+        man Netze als Hierachien auffassen. Innerhalb eines Teilnetzes wird ein
+        beliebiges Routingverfahren verwendet, alle Pakete die das Teilnetz
+        verlassen gehen an einen besonders designierten Router. Dieser ist Teil
+        der n"achsth"oheren Hierarchiestufe, in der das Routing ohne Betrachtung
+        der tieferen Stufen erfolgt.
+      \subsubsection*{Broadcast/Multicast}
+        Sollen mehrere Empf"anger angesprochen werden, kann man nat"urlich
+        einfach das Netz fluten. Eine Alternative ist, da"s jeder Router das
+        Broadcast/Multicast-Paket auf allen Leitungen verschickt, die eine
+        korrekte Route zum einem der Ziele darstellen
+        (Multidestination-Routing). Eine weitere Methode ist, einen
+        \textit{Spanning Tree} "uber alle Knoten aufzubauen, und die Pakete an
+        dessen Kanten weiterzuleiten - dazu mu"s aber jeder Knoten die komplette
+        Netztopologie kennen. Beim Multicast existiert zus"atzlich ein Spanning
+        Tree f"ur jedes Mitlied der Gruppe (jeder ist beim Senden die Quelle des
+        Spanning Tree) was zu Speicherproblemen f"uhren kann. (Alternativ kann
+        auch nur ein Baum existieren, und die Daten werden zuerst an die Wurzel
+        gesendet. (Beim Multicast existiert zus"atzlich das Problem, den Baum
+        auf alle Mitglieder der Gruppe zu beschneiden.)
+        
+        Ein Verfahren, um auch ohne komplette Kenntnis der Topologie einen Baum
+        zu erhalten ist das \textbf{Reverse Path Forwarding}. Hier nimmt ein
+        Router an, da"s ein Multicast-Paket das auf der "ublichen Route von
+        seinem Sender ankommt, das \glqq richtige \grqq\ ist. Alle Pakete, die
+        nicht "uber die Leitung kommen, "uber die normalerweise Pakete an den
+        Sender gehen, werden als Duplikate verworfen, das \glqq richtige \glqq\
+        Paket wird weitergeflutet. Mit diesem Ansatz wird das Verhalten eines
+        spannenden Baumes nachgebildet. Beim Multicast-Routing kann ein Router,
+        der keine Hosts der entsprechenden Gruppe besitzt verlangen, da"s er
+        keine Pakete mehr erh"alt (PRUNE). Ein Router, der von allen seinen
+        Nachbarn PRUNE-Meldungen bekommt, kann sich ebenfalls ausklinken (dieser
+        Mechanismus entspricht dem Beschneiden des Baumes).
+    \subsection*{"Uberlastungs"uberwachung}
+      Die Steuerung von "Uberlastungen unterscheidet sich etwas von der
+      Flu"skontrolle: Hier geht es darum, da"s das Netz als solches die Last
+      nicht mehr verkraften kann (z.B. ein Router ist "uberlastet) - es geht
+      also nicht um die beiden Endsystem, sondern um das, was dazwischenliegt.
+      Auf der Vermittlungsschicht geht es haupts"achlich darum, da"s Router die
+      Datenmenge, die sie erhalten, nicht mehr richtig verarbeiten k"onnen.
+      
+      Bei der Umschiffung von "Uberlastungen gibt es zwei M"oglichkeiten:
+      Entweder das System so zu konstruieren, da"s keine "Uberlastungen
+      entstehen (offene Schleife) oder zu versuchen, bei "Uberlastungen
+      Gegenma"snahmen zu treffen (geschlossene Schleife). Manche Methoden
+      funktionieren besser (oder nur) mit virtuellen Verbindungen, manche
+      eignen sich auch Datagrammdienste.
+      \subsubsection*{Traffic Shaping}
+        Hier sollen die Station gezwungen werden, ihre Daten in einer
+        einergerma"sen vorhersehbaren Rate zu senden, was die Vermeidung von
+        "Uberlastungen ungemein vereinfacht. ATM wendet z.B. Traffic-Shaping an
+        um eine maximale Auslastung der virtuellen Verbindungen zu garantieren.
+        Traffic Shaping geht davon aus, da"s die Transportschicht einfach Daten
+        sendet, eventuell mit pl"otzlichen Spitzen, oder viel zu viele.
+        
+        Um das wieder in den Griff zu bekommen, die Datenrate zu beschr"anken
+        und etwas gleichm"a"siger zu machen, kann man den
+        \textbf{Leaky-Bucket}-Algorithmus verwenden. Er modelliert einen Eimer,
+        in den (schwallweise?) Wasser gesch"uttet wird, das durch ein Loch im
+        Boden wieder heraustropft. L"auft der Eimer "uber, geht Wasser verloren.
+        Praktisch l"a"s also der Router immer nur eine gewisse Anzahl Pakete pro
+        Zeittakt passieren und sorgt damit f"ur eine gleichm"a"sige Datenrate. 
+        Kommen mehr Pakete an, werden sie gepuffert, l"auft der Puffer "uber,
+        werden sie verworfen. 
+        
+        Will man kurz\-zeitige Spitzen zulassen, kann man den
+        \textbf{Token-Bucket} Algorithmus verwenden. Hier nimmt der Eimer Tokens
+        auf, die in einer gleichm"a"sigen Rate erzeugt werden. Jedes Paket, das
+        verschickt wird, verbraucht ein Token. Wenn eine Sendung beginnt, kann
+        sie solange mit voller Geschwindigkeit senden, bis die Token im Eimer
+        verbraucht sind. Danach kann nur noch mit der Geschwindigkeit gesendet
+        werden, wie neue Token erzeugt werden. Beide Mechanismen lassen sich
+        statt mit Paketen auch byteweise durchf"uhren.
+        
+        Damit klar ist wie viele Resourcen gebraucht werden, k"onnen die
+        Partner (die Stationen und das Netz) eine Flu"sspezifikation
+        vereinbaren. Hier werden die maximalen Datenraten, zul"assige
+        Verz"ogerungen, die Gr"o"se der Buckets und "ahnliches festgelegt.
+      \subsubsection*{Choke-Pakete}
+        Wenn ein Netz "uberlastet ist, hilft es irgenwann nur noch, wenn die
+        Sender ihre Last zur"uckfahren. Eine M"oglichkeit, die Sender von der
+        "Uberlast zu informieren, sind sogenannte \textit{Choke-Pakete}. Dies
+        sind Warnungen die (eventuell huckepack) von der "uberlasteten Stelle an
+        den Sender geschickt werden, damit dieser seine Sendung reduziert.
+        Erh"alt der Sender weitere Choke-Pakete, drosselt er die Leistung
+        weiter, kommen keine mehr legt er langsam wieder zu. Choke-Pakete habe
+        allerdings das Problem bei einer "Uberlassituation noch weitere Pakete
+        zu erzeugen, au"serdem kann die Reaktionszeit auf langen Leitungen recht
+        lang sein. Letzteres Problem kann behoben werden, wenn jeder Router, der
+        ein Choke-Paket erh"alt die Leistung sofort drosselt und die restlichen
+        Pakete puffert (\textbf{Hop-by-Hop-Choke}).
+      \subsubsection*{Weighted Fair Queuing}
+        Bei den Choke-Funktionen (nicht nur da) kann es passieren, da"s sich ein
+        Sender nicht an die Vereinbarungen h"alt und dadurch unfairerweise
+        bevorzugt wird (weil er als einziger seine Last nicht drosselt). Um ihn
+        daran zu hindern kann jeder Router f"ur jeden Eingang eine eigene
+        Warteschlange haben, diese werden dann reihum bedient. Ein \glqq
+        unfairer\grqq\ Router bekommt so nicht mehr Bandbreite als einer, der
+        sich korrekt verh"alt. Soll eine Leitung bevorzugt werden, so darf sie
+        mehr als ein Paket pro Zeiteinheit versenden. (Das ganze funktioniert
+        wieder auch byteweise statt paketweise).
+      \subsubsection*{Load Shedding}
+        Gibt es keine andere M"oglichkeit, mu"s der Router irgendwann anfangen,
+        Daten zu verwerfen. Damit sollte er auch noch einigerma"sen fr"uhzeitig
+        anfangen, bevor die Situation v"ollig verfahren ist. Die Frage ist jetzt
+        nur noch: Welche Daten k"onnen weg? Sind die Daten z.B. ein
+        Multimedia-Strom, k"onnen eher alte Pakete verworfen werden (Milch). 
+        In anderen F"allen sind neue Pakete weniger wichtig (Wein). In anderen
+        F"allen k"onnte der Router sinnvollere Entscheidungen treffen, wenn er
+        den Inhalt der Daten kennt. (Wird z.B. ein Teil eines IP-Paketes nicht
+        "ubertragen, braucht man den Rest auch nicht mehr).
+      \subsubsection*{Jitter-Kontrolle}
+        Manchmal ben"otigt man m"oglichst gleichbleibende Verz"ogerungszeiten.
+        In diesem Fall k"onnten Route Pakete, die zu schnell sind verz"ogern,
+        und zu langsame Pakete bevorzugt zustellen.
+      \subsubsection*{Resource Reservation Protocol}
+        Dies ist ein Protokoll zur Reservierung von Resourcen beim Multicast. Es
+        wird (irgendwie) ein spannender Baum aufgebaut. Entlang dieses Baumes
+        k"onnen jetzt Resourcen f"ur Multicast-Verbindungen reserviert werden,
+        dabei wird jede Teilstreke logischerweise maximal f"ur eine "Ubertragung
+        reserviert.
+    \subsection*{Tunneling}
+      Manchmal muss ein Paket "uber eine Strecker "ubertragen werden, die das
+      entsprechende Protokoll nicht unterst"utzt. In diesem Fall k"onnen die
+      Pakete in Pakete des fremden Protokolls \glqq eingepackt\grqq\ werden, und
+      am Ende der Strecke (bzw. des Teilnetzes) werden sie wieder ausgepackt. Am
+      Anfang und Ende der Tunnelingstrecke werden spezielle Router ben"otigt,
+      die das Ein- und Auspacken erledigen.
+    \subsection*{Fragmentierung}
+      Manchmal unterst"utzt eine Teilstrecke nur eine maximale Paketgr"o"se, die
+      kleiner ist, als das Paket. In diesem Fall mu"s das Paket von einem Router
+      in kleinere Teile zerlegt (fragmentiert) werden. Das Zusammensetzen der 
+      Fragmente erledigt entweder ein anderer Router (transparent) oder das
+      Endsystem selber. Ein Fragment mu"s irgendwie die Information enthalten,
+      zu welchem Paket es geh"ort, und an welche Stelle des Paketes. Das kann
+      mit laufenden Nummern, oder einem Byteoffset zum Paketanfang geschehen.
+      Problematisch wird es, wenn Pakete mehrfach fragmentiert werden, oder wenn
+      ein Fragment verloren geht und wiederholt werden soll.
+    \subsection*{IP - Internet Protocol}
+      IP ist das Vermittlungsschicht-Protokoll im Internet. Es bietet einen
+      verbindungslosen, unzuverl"assigen, paketorientierten Dienst an. Die
+      Steuerprotokolle ICMP und (R)ARP unterst"utzen IP bei seiner Aufgabe.
+      \subsubsection*{IP-Paketkopf}
+        Der IP Paketkopf enth"alt die Version des verwendeten IP-Protokolls
+        (4), die L"ange des Paketkopfes, eine (nicht verwendete)
+        Servicetypebeschreibung, die Gesamtl"ange des
+        Paketes, eine Eindeutige ID f"ur die Fragmentierung, einen
+        Fragmentoffsett f"ur die Fragmentierung, die Bits DF (don't fragment)
+        und MF (more fragments), die Restlebensdauer des Paketes, einen Code
+        f"ur das verwendete Protokoll der Transportschicht, eine Pr"ufsummen
+        f"ur den Paketkopf und jeweils eine 32 bit lange Ziel- und
+        Quelleadresse die weltweit eindeutig ist. Au"serdem stehen 40
+        Byte f"ur optionale Header zur Verf"ugung. Es sind
+        Header-Optionen wie Source Routing oder Route Logging oder Security
+        definiert, diese werden jedoch von den existierenden Routern nicht
+        unterst"utzt.
+      \subsubsection*{IP-Adressierungsschema}
+        Der IP-Adressraum ist in mehrere Nezklassen eingeteilt. Ein IP-Adresse
+        besteht aus einem Klassencode, der Netzadresse und der Hostadresse. Die
+        Hostadresse kann eventuell noch in Subnetz- und Hostadresse aufgeteilt
+        werden. Die urspr"ungliche Form sah 5 Klassen vor: A (Code: 0), 16 Netze
+        mit 16 Millionen Hosts, B (01), 16k Netze mit 64k Hosts, C (011), 2
+        Millionen Netze mit 256 Hosts, D (0111) für Multicast-Adressen und E
+        (01111) f"ur sp"atere Verwendung. Es sind also zwei bzw. drei Schichten
+        f"ur das Routing vorgesehen: Ein Paket wird zuerst zu seinem Netz
+        geleitet und dort (vielleicht "uber Subnetze) intern weiterverteilt.
+      \subsubsection*{CIDR}
+        Leider waren nach dem urspr"unglichen Schema die Adressen irgendwann
+        viel zu knapp. Viele Firmen reservierten ein Class B Netz, obwohl sie
+        gar nicht so viele Adressen brauchten, denn die 256 Host der Klasse C
+        waren zu wenig. Die Einrichtung von Millionen Teilnetzen (z.B. mehr
+        Klasse C) w"urde au"serdem zu einer Explosion der Routingtabellen
+        f"uhren. Um das Problem zu entsch"arfen, wurde die Vergabe von
+        Class-C-Subnetzen ge"andert: Statt als Subnetze werden die Adressen
+        jetzt in variabel gro"sen Bl"ocken vergeben. Um das Routing zu
+        vereinfachen, wird der Adressraum in Zonen unterteilt (Nord- und
+        S"udamerika, Europa und Asien) die dann f"ur das Routing als \glqq
+        Subnetze \grqq\ gelten. Damit nicht jedes C-Netz in einem Block einzeln
+        in die Routingtabelle mu"s, wird zus"atzlich zu einem Block eine
+        Netzmaske vergeben. Die Netzmasken werden dann mit den eingehenden
+        Paketen AND-verkn"upft um den richtigen Eintrag zu finden (d.h. es wird
+        gepr"uft, ob der Anfang der Adresse mit dem Anfang des entsprechenden
+        Routing-Eintrages "ubereinstimmt).
+      \subsubsection*{IP-Routing}
+        Das Internet besteht aus einer gro"sen Zahl von \textit{autonomen
+        Systemen} (also z.B. Firmennezen). Der Betreiber eines solchen Systems
+        kann das Routingverfahren dort selbst bestimmen (internes Routing). Das
+        Routing zwischen den einzelnen autonomen Systemen wird als externes
+        Routing bezeichnet.
+      \subsubsection*{Open Shortest Path First}
+        OSPF ist das empfohlene Routingprotokoll f"ur internes Routing, ein
+        Link-State-Protokoll. (Fr"uher wurde das Distance-Vektor-Protokoll RIP
+        verwendet, aber es hatte recht viele Schw"achen).
+        
+        OSPF sieht ein System als Ansammlung von \textit{Bereichen} an. Mehrere
+        Bereiche "uberlappen sich nicht, es m"ussen aber nicht alle Hosts zu
+        einem Bereich geh"oren. Alle Router sind auf jeden Fall an den
+        Backbone-Bereich angeschlossen. Ein Router in einem Bereich berechnet
+        immer nur die Routen f"ur diesen Bereich, ein Paket f"ur einen anderen
+        Bereich wird an das Backbone gesandt, dort weiterverteilt und
+        schlie"slich von den Routern im Zielbereich ausgelierfert. Ein Router
+        mu"s also nicht immer die komplette Topologie des Netzes kennen.
+        
+        OSPF verwendet ein einfaches Protokoll zum Datenaustausch zwischen den
+        Routern das auf IP aufsetzt. Die Nachrichten werden best"atigt. Ein
+        Router kann HELLO-Pakete aussenden, um seine Nachbarn zu finden (per
+        Multicast). Ein LINK STATE-Paket wird von einem Router regelm"a"sig oder
+        bei Bedarf verschickt und zwar nicht an alle Nachbarn, sondern nur an
+        sogenannte \textit{angrenzende} Router. Es gibt einen designierten
+        Router, der an alle anderen angrenzt, ein Backup f"ur ihn steht
+        jederzeit bereit. Router k"onnen au"serdem den Stand seiner
+        Linkdatenbank aussenden, oder von einem anderen Link-State-Informationen
+        einfordern.
+        
+        Anhand ihrer Informationen berechnen die Router dann die jeweils
+        k"urzesten Pfade zu den einzelnen Zielen.
+      \subsubsection*{Border Gateway Protocol}
+        Dies ist das Protokoll f"ur das externe Routing im Internet. Beim
+        externen Routing m"ussen gewisse Regeln beachtet werden, z.B. wollen
+        eventuell gewisse Netze bestimmten Verkehr nicht "ubertragen. Das BGP
+        ist ein deutlich verbessertes Distance-Vektor-Verfahren, da"s mit
+        solchen Regeln umgehen kann. Ein Router speichert nie nur die Entfernung
+        und den n"achsten Router zu einem Ziel, sondern den kompletten Pfad. Er
+        erh"alt von den Nachbarn verschiedene Pfade zu den Zielen, und kann
+        davon den besten aussuchen; Pfade die durch ihn selber f"uhren
+        (vermeidet Count-To-Infinity) und Pfade die nicht zu den Regeln passen,
+        k"onnen dabei verworfen werden. Hat der Router einen Pfad ausgew"ahlt,
+        so "ubertr"agt er ihn an alle anderen als \glqq seinen \grqq\ Pfad.
+      \subsubsection*{ICMP}
+        Das Internet Control Message Protocol dient zu Wartungszwecken im
+        Internet. Hier liegt z.B. der ECHO-Mechanismus (Pr"ufen von
+        Verbindungen) und CHOKE-Pakete. Jede ICMP-Nachricht wird in ein IP-Paket
+        verpackt.
+      \subsubsection*{ARP/RARP}
+        Das Adress Resolution Protocol dient der Zuordnung von IP-Adressen zu
+        Schicht-2-Hardwareadressen. Es wird ein Broadcast gesendet, mit der
+        Aufforderung da"s sich der Besitzer der IP-Adresse x bitte melden m"oge.
+        Alle, die diesen Broadcast h"oren, k"onnen ihren ARP-Cache
+        aktualisieren, und wissen jetzt unter welcher Hardwareadresse sie diese
+        IP erreichen. 
+        
+        Beim RARP kann eine Station eine Anfrage rundsenden, welche
+        IP-Adresse zu ihrer Hardwareadresse geh"ort. Diese Anfrage wird von
+        einem designierten RARP-Server beantwortet, der die Zuordnungen
+        gespeichert hat.
+      \subsubsection*{Multicast-Routing}
+        IP bietet Multicast-Dienst f"ur Gruppen an. Multicast-Adressen liegen im
+        Bereich 224.x.y.z, manche dieser Adressen haben festgelegte Bedeutungen
+        (z.B. 224.0.0.1 f"ur das lokale Netzwer). F"ur das Multicasting werden
+        spezielle Multicast-Router ben"otigt (MBone), die regelm"a"sig die
+        angeschlossenen Hosts nach ihrer Gruppenzugeh"origkeit fragen. Die
+        Multicast-Router tauschen die Daten dann entlang eines spannenden Baumes
+        aus.
+      \subsubsection*{IPv6}
+        Die n"achste Generation des IP-Protokolls soll vor allen Dingen den
+        Mangel an Adressen beheben, au"serdem wurde der Header vereinfacht, um
+        die Verarbeitung der Pakete effizienter gestalten zu k"onnen.
+        
+        Der \textbf{IPv6-Header} besteht aus dem "ublichen Feld mit der
+        Versionsnummer (6), einem Flow-Control-Feld das zusammen mit speziellen
+        Routern Datenfl"usse (d.h. Pseudo-Verbindungen) erm"oglichen soll, einer Angabe
+        "uber die L"ange der Nutzlast (maximal 64k), einem
+        Feld mit dem Typ des n"achsten (optinalen) Headers (falls kein Header
+        mehr folgt, steht hier der Code des Schicht-4-Protokolls), und ein Feld mit der
+        restlichen Lebensdauer in Hops. Weggefallen sind die Checksumme (mu"ste
+        bei IPv4 in jedem Router neu berechnet werden) und die Mechanismen zur
+        Fragmentierung: Wenn in IPv6 ein Router ein Paket nicht annehmen kann,
+        lehnt er es ab und informiert den Sender "uber seine MTU (maximum
+        transfer unit). Der Sender ist daf"ur verantwortlich, da"s die maximal
+        zul"assige Paketgr"o"se nicht "uberschritten wird. Die Quell- 
+        und Ziel-\textbf{Adressen} schlie"slich sind 128 bit lang und wieder
+        hierarchisch gegliedert (nach Regionen, dann nach Providern, etc.). Die
+        Adressen des bisherigen IPv4 sind auch im IPv6-Adressraum enthalten.
+        
+        IPv6 unterst"utztl eine Reihe von \textbf{optionalen Headern}, z.B. f"ur
+        das Versenden von Jumbogrammen (Paketen > 64k), Routingfunktionen,
+        Sicherheit, Verschl"usselung und "ahnliches.
+  \section{Transportschicht}
+    Die Transportschicht bietet zwei entfernten Kommunikationspartnen Dienste
+    f"ur die Ende-zu-Ende-Kommunikation an, z.B. zuverl"assige virtuelle
+    Verbindungen. Dies geschieht unabh"angig von den F"ahigkeiten der
+    Vermittlungsschicht. 
+    
+    In gewisser Weise hat die Transportschicht "ahnliche Aufgaben wie die
+    Sicherungsschicht: Sie mu"s die Unzul"anglichkeiten tieferer Schichten
+    ausgleichen, um den Anwendungen einen zuverl"assigen Dienst zu bieten.
+    Deshalb kommen auch Mechanismen aus der Sicherungsschicht wie die
+    Flusskontrolle hier wieder zum Einsatz. Andererseits unterscheidet sich die
+    Situation hier grundlegend von einer Direktverbindung: Pakete k"onnen
+    dupliziert und verz"ogert werden, und nicht nur der Kommunikationspartner
+    sondern auch das Netz selbst kann "uberlastet sein. Au"serdem hat eine
+    Transportschicht-Instanz m"oglicherweise viele Verbindungen mit variabler
+    Paketgr"o"se gleichzeitig zu versorgen.
+    \subsection*{Flu"skontrolle}
+      Grunds"atzlich kommt hier, wie in der Sicherungsschicht, ein
+      Schiebefenster zum Einsatz. Man kann hier aber nicht davon ausgehen, da"s
+      unbest"atigte Pakete auch wirklich verschwunden sind, sie k"onnte ja auch
+      nur verz"ogert sein und zu einem ung"unstigen Zeitpunkt wieder auftauchen.
+      Duplizierte Pakete (ein Duplikat tauch zum falschen Zeitpunkt noch mal
+      auf) verschlimmern das Problem noch.
+      Um dieses Problem zu l"osen, ben"otigt man einen Mechanismus der
+      verz"ogerte Pakete (und ihre Best"atigungen) irgendwann verwirft -- es
+      gibt also eine Zeitspanne $ T $, nach der ein Paket und alle
+      Best"atigungen auf jeden Fall verschwunden sind (Das l"a"st sich mit
+      Timeouts erreichen). Andererseits ist es notwendig, da"s ung"ultige Pakete
+      erkannt und verworfen werden.
+      
+      Eine Methode w"are die Verwendung von eindeutigen Verbindungs-IDs damit
+      die Partner herausfinden k"onnen, ob ein Paket zu einer g"ultigen
+      Verbindung geh"ort. Allerdings m"ussten in diesem Fall die IDs aller alten
+      Verbindungen gespeichert werden (und sie w"aren verloren, wenn der Host
+      abst"urzt...). Eine andere M"oglichkeit ist die Verwendung von
+      Zeitangaben: Dazu m"ussen die beiden Rechner synchronisierte Uhren haben
+      (die auch nach einem Absturz weiterlaufen). Als erste Sequenznummer einer
+      Verbindung wird dann die aktuelle Uhrzeit verwendet (oder ein Teil davon),
+      durch diese Methode sind die Sequenznummern eindeutig festgelegt, und
+      veraltete Aufbauw"unsche w"urden abgelehnt. Der Folgenraum sollte so gro"s
+      sein, da"s wandernde Pakete auf jeden Fall verschwunden sind, bevor
+      sich die Folgennummern wiederholen (ein Problem bei Gigabitnetzen!). 
+      
+      Ein andere Problem kann noch auftauchen, wenn ein Host abgest"urzt war,
+      wieder aufsetzt und vor dem Absturz Folgennummern verwendet wurden, die
+      nun g"ultig sind (d.h. Folgennummern, die um bis zu $ T $ gr"o"ser sind,
+      als die aktuelle Uhrzeit) -- sollten diese Pakete noch auftauchen, werden
+      sie als g"ultig akzeptiert. Deshalb m"ussen Pakete, die f"ur eine neu
+      aufgesetzte Verbindung noch g"ultig w"aren, verboten werden. Das betrifft
+      alle Sequenznummern in einer verbotenen Zone der Breie $ T $ oberhalb der
+      aktuellen Zeit (Pakete mit noch gr"o"serer Uhrzeit w"aren verworfen, bis
+      die Uhrzeit diesen Stand erreicht hat). Das bedeutet allerdings auch, da"s
+      h"ochstens ein Paket pro Zeittakt gesendet werden darf (die Uhr m"u"s also
+      sehr schnell laufen), und da"s die verbotene Zone auch erreicht wird, wenn
+      sich der Sender sich ihr durch langsames Senden \glqq vom anderen Ende
+      \grqq\ aus n"ahert (die Folgenummern wiederholen sich ja).
+    \subsection*{Pufferverwaltung}
+      Die Transportschicht mu"s eventuell einen Haufen Verbindungen verwalten
+      und unterst"utzt m"oglicherweise Transportschicht-Pakete (TPDUs) mit
+      unterschiedlicher Gr"o"se. Es ist also oft nicht m"oglich und sinnvoll,
+      einen Puffer mit festgelegten Gr"o"sen einzurichten. Stattdessen sollte
+      die Transportschicht den Puffer dynamisch verwalten und nat"urlich
+      sinnvoll organisieren (verkettete Puffer, Kreispuffer, wasauchimmer...).
+      Damit das funktioniert, wird dann ein \textbf{Schiebefenster mit
+      dynamischer Gr"o"se} verwendet: Der Empf"anger teilt in der Best"atigung
+      jeweils mit, wie viele Pakete noch gesendet werden d"urfen. Wartet der
+      Sender, und es werden wieder Puffer frei, wird das dem Sender auch
+      mitgeteilt. Diese Mitteilung sollte nach einer Zeit wiederholt werden,
+      falls sie verlorenging und der Sender immer noch wartet.
+    \subsection*{"Uberlastungssteuerung}
+      Erh"alt Schicht 3 von Schicht 4 konstant mehr Daten als sie "ubertragen
+      kann wird sie irgendwann beginnen, Pakete zu verwerfen. In diesem Fall
+      kann nur eine Drosselung der Transportschicht-Senderate wirklich eine
+      Abhilfe schaffen. Deshalb mu"s der Sender sein Sendefenster nicht nur an
+      den Empf"angern anpassen, sondern auch an die Gegebenheiten im Netz.
+      Welche Mechanismen dort verwendet werden, wird am Beispiel von TCP
+      erl"autert.
+    \subsection*{Verbindungsauf- und Abbau}
+      Damit beim Verbindungsaufbau nichts schiefgeht, wird ein
+      Drei-Wege-Handshake verwendet: Verbindungsanfrage, Best"atigung,
+      R"uckbest"atigung (mit erstem Datenpaket). G"abe es die R"uckbest"atigung
+      nicht, k"onnte eventuell der zweite Partner zu senden beginnen obwohl die
+      Best"atigung verlorgen gegangen ist. Auf der Transportschicht werden beim
+      Verbindungsaufbau auch die intialen Sequenznummern ausgehandelt.
+      
+      Beim Verbindungsabbau kann wieder ein Dreiwege-Protokoll verwendet werden, obwohl
+      hier nicht alle Fehlerf"alle auszuschlie"sen sind (byzantinisches
+      Problem).
+    \subsection*{TCP}
+      TCP ist das Protokoll der Transportschicht im Internet. Es stellt
+      zuverl"assige Punkt-zu-Punkt-Verbindungen zwischen zwei Applikationen zur
+      Verf"ugung. Diese Verbindungen sind immer Vollduplex-Verbindungen, und
+      "ubertragen Bytestr"ome. TCP "ubertr"agt die Daten in sogenannten
+      Segmenten, wobei die Aufteilung des Bytestromes in Segmente von TCP
+      v"ollig willk"urlich vorgenommen werden kann.
+      \subsubsection*{Berkeley Sockets}
+        Ein Socket ist ein Zugangspunkt zur Transportschicht. Mann kann ein
+        Socket erzeugen, ihm eine Adresse zuweisen, Verbindungen auf ihm
+        entgenenehmen oder eine ausgehende Verbindung aufbauen.
+        Selbstverst"andlich k"onnen durch das Socket dann auch Daten gesendet
+        und empfangen werden.
+      \subsubsection*{TCP-Adressierungsschema}
+        Eine TCP-Verbindung ist eindeutig gekennzeichnet durch die Adressen der
+        beiden Endpunkte. Eine TCP-Adresse besteht aus der IP-Adresse und dem
+        \textbf{Port}. Die Ports unter 256 sind wohlbekannt (\textbf{well
+        known}) und Standarddiensten zugeordnet (z.B. Mail, Telnet, etc.)
+        H"ohere Portnummern ("uber 1024) k"onnen von Applikationen frei 
+        verwendet werden, z.B. zum Aufbau von Verbindungen.
+      \subsubsection*{TCP-Semgmentheader}
+        Der TCP-Segmentheader enth"alt zun"achst einmal die Ziel- und
+        Quellportnummer der Verbindung. Au"serdem ist eine 32-Bit Sequenznummer
+        und ein Best"atigungsnummer enthalten (die Best"atigungsnummer
+        entspricht der n"achsten erwarteten Sequenznummer). Ein weiteres Feld
+        beschreibt das Empfangsfenster des Senders (d.h. wie viele Byte ab dem
+        best"atigten noch gesendet werden d"urfen). Ein Feld gibt die L"ange des
+        TCP-Headers an (es sind optionale Felder m"oglich) und eine Pr"ufsumme
+        sichert den TCP-Header, die Daten und den sog. Pseudo-Header der die
+        IP-Adressen von Sender und Empf"anger enth"alt. Das ACK-Bit gibt an,
+        da"s die Best"atigung in diesem Segmentheader g"ultig ist. Das SYN-Bit
+        dient dem Verbindungsaufbau. Das PSH-(Push-)Bit gibt an da"s Push-Daten
+        gesendet werden (die sofort an die Anwendung ausgeliefert werden
+        sollen). Das URG-(Urgent-)Bit zeigt dringende Daten an, die sofort
+        ausgeliefert werden (eine Art Interrupt-Signalisierung) in diesem Fall
+        verweist ein Urgent-Zeiger im Header auf den Beginn der dringenden
+        Daten. Das RST-(Reset-)Bit dient dem Zur"ucksetzen der Verbindung nach
+        einer St"orung, das FIN-Bit zum Verbindungsabbau.
+        
+        Nach dem eigentlichen Segmentheader k"onnen noch weitere Optionen
+        folgen. Tats"achlich verwendete Optionen sind \textbf{Window Size}, das
+        eine andere Skalierung der Fenstergr"o"se vorgibt um ein Empfangsfenster
+        von > 64k zu erm"oglichen und die implementierung der selektiven
+        Wiederholung.
+      \subsubsection*{Verbindungsauf- und abbau}
+        Eine TCP-Verbindung wird initiert, indem ein Proze"s (A) eine
+        Verbindungsanfrage an einen warten Proze"s (B) (der ein Socket "uberwacht)
+        stellt. Dazu sendet Proze"s A ein SYN-Segment mit seiner initialen
+        Sequenznummer. B antwortet mit einem SYN-Paket, da"s die Anfrage
+        best"atigt und Bs initiale Segmentnummer enth"alt (SYN ACK). Daraufhin
+        best"atigt A wiederum das eingegangene Paket (ACK), die Verbindung ist
+        aufgebaut und beide Partner k"onnen Daten senden.
+        
+        Die beiden Richtungen einer TCP-Verbindung werden getrennt abgebaut:
+        Jede Seite sendet ein FIN-Segment, wenn sie ihre "Ubertragung beendet hat,
+        und wartet auf die best"atigung. Wenn eine Station ein FIN-Segment
+        erh"alt, kann sie mit der Best"atigung auch gleich den Abbauwunsch der
+        anderen Richtung "ubermitteln (FIN ACK).
+      \subsubsection*{Nagles Algorithmus und Silly Window Syndrome}
+        Das Lesen und Schreiben von einzelnen Bites kann in TCP zu Problemen
+        f"uhren. Senden Stationen immer nur einzelne Bytes, so wird f"ur jedes
+        Byte ein eigenes, 21 Bit gro"ses Segment erzeugt und unn"otig Bandbreite
+        verschwendet. Nagles Algorithmus sieht daher vor da"s, wenn ein
+        einzelnes Byte "ubertragen wird, die "Ubertragung angehalten wird bis
+        die Best"atigung eintrifft (in der Hoffnung, da"s sich noch ein paar
+        Bytes mehr ansammeln.
+        
+        Umgekehrt kann es vorkommen, da"s ein Proze"s immer nur einzelne Bytes
+        aus dem Empfangpuffer liest. In diesem Fall w"urde der Empf"anger jedes
+        Mal ein neues Empfangsfenster von einem Byte signalisieren, und der
+        Empf"anger jeweils ein einzelnes Byte "ubertragen. Dies ist das
+        Silly-Window-Syndrom und erzeugt ebenfalls sinnlosen Overhead. Zur
+        Abhilfe mu"s der Empf"anger solange warten, bis er wieder ein Fenster
+        mit einer sinnvollen Gr"o"se signalisieren kann.
+      \subsubsection*{"Uberlastungs"uberwachung}
+        TCP verwaltet f"ur jedes Segment einen Timeout, nachdem es erneut
+        "ubertragen wird. Es wird davon ausgegangen, da"s eine ausbleibende
+        Best"atigung auf eine "Uberlastung im Netz zur"uckgeht (eine Annahme,
+        die f"ur Kabel- bzw. insbesonder f"ur Glasfaser"ubertragung gemacht
+        werden kann, bei Funk"ubertragung gibt es hier Probleme). TCP verwaltet
+        zus"atzlich zum Empfangsfenster ein sogenanntes "Uberlastungsfenster
+        (Congestion Window),
+        das ebenfalls angibt wie viele Bytes der Sender "ubertragen kann. 
+        
+        Das "Uberlastungsfenster wird in TCP durch den \textbf{Slow Start}
+        Algorithmus angepasst: Das Fenster hat zuerst einen Minimalwert (z.B.
+        eine maximale Segmentgr"o"se) und wenn alle Daten im Segment erfolgreich
+        "ubertragen wurden, wird das Fenster verdoppelt. Dies geht solange, bis
+        entweder Daten verlorengehen, oder die Gr"o"se des Empfangsfenster
+        erreicht wurde. Zus"atzlich wird ein Schwellenwert gef"uhrt, der bei
+        Paketverlusten auf die Gr"o"se des halben "Uberlastungsfensters gesetzt
+        wird. Bis der Schwellenwert erreicht wird, verdoppelt der
+        Algorithmus das "Uberlastungsfenster, dar"uber wird linear
+        weitervergr"o"sert.
+      \subsubsection*{Timermanagement}
+        Ein Problem im TCP ist die Verwaltung des Timeouts f"ur verlorene Pakete
+        -- einfach weil nicht genau bekannt ist wann die Best"atigung eigentlich
+        ankommt. TCP behilft sich, indem es versucht, zuerst einmal die
+        durchschnittliche Rundreisezeit bis zum Ziel zu bestimmen:
+        \[
+        	R = \alpha R + (1 - \alpha)M
+        \]
+        Dabei ist $ R $ die gesch"atzte Rundreisezeit und $ M $ die gemessene
+        Zeit von Senden bis zur Best"atigung des letzten Paketes. $ \alpha $ ist
+        ein Gl"attungsfaktor. Zus"atzlich wird versucht, ann"ahernd die
+        Standardabweichung der Best"atigungsankunft zu bestimmen:
+        \[
+        	D = \alpha D + (1 - \alpha) | RTT - M |
+        \]
+        Der Gl"attungsfaktor $ \alpha $ braucht nicht unbedingt der selbe zu
+        sein wie oben. $ D $ ist zwar nicht die Standardabweichung aber eine
+        hinreichend sinnvolle N"aherung. Der Timeout $ T $ berechnet sich dann
+        nach 
+        \[
+        	T = R + 4D
+        \]
+        also ein Paket wird nach der durchschnittlichen Rundreisezeit plus der
+        vierfachen Standardabweichung als verloren angesehen. Das ist relativ
+        konservativ: Etwas zu lange warten ist besser als st"andig neu zu
+        "ubertragen und Slow Start anzuwenden.
+    \subsection*{TCP in mobilen Umgebungen}
+      Beim mobilen Einsatz macht sich vor allem Slow Start unangenehm bemerkbar:
+      Funkverbindungen verlieren recht h"aufig Pakete, und eine sinnvolle
+      Strategie w"are eigentlich, diese sofort neu zu "ubertragen. Andererseits
+      w"urde ohne Slow Start das Internet zusammenbrechen, der Mechanismus
+      sollte also weiterhin in IP implementiert bleiben.
+      \subsubsection*{Fast Retransmit/Fast Recovery}
+        Diese TCP-Option geht davon aus, da"s keine "Uberlastung vorliegt
+        solange noch \textit{irgendwelche} Best"atigungen von Empf"anger
+        eingehen (selbst wenn es nicht die f"ur das aktuelle Paket sind). In
+        diesem Fall versucht TCP die nicht best"atigten Segmente sofort noch
+        einmal zu "ubertragen (Fast Retransmit). Au"serdem liegt kein Grund vor,
+        Slow Start anzuwenden und die Datenrate wird beibehalten (Fast
+        Recovery). Slow Start wird nur angewendet, wenn die Best"atigungen ganz
+        ausbleiben.
+        
+        Eine weitere M"oglichkeit ist es, da"s der mobile Knoten diesen
+        Mechanismus erzwingt, indem er von sich aus Best"atigungsduplikate
+        versendet.
+      \subsubsection*{Indirect TCP}
+        Bei dieser Variante dient der Zugangspunkt (bzw. Foreign Agent)
+        des mobilen Host gleichzeitig
+        als TCP-Proxy. Er best"atigt alle Segmente des Kommunikationspartners,
+        puffert sie und liefert sie dann selbst "uber eine TCP-Verbindung an den
+        Knoten aus. Am Knoten selbst und am Kommunikationspartner mu"s nichts
+        ge"andert werden, und das Verfahren ist recht effizient. Alllerdings
+        geht die Ende-Zu-Ende-Semantik von TCP verloren, kann der
+        Knoten nicht erreicht werden, werden die Segmente nicht ausgeliefert
+        \textit{obwohl sie schon best"atigt sind}. Au"serdem m"ussen beim Wechsel
+        des Zugangspunktes alle gepufferten Daten zum neuen Zugangspunkt
+        "ubertragen werden.
+      \subsubsection*{Snooping TCP}
+        Hier trennt der Zugangspunkt die Ende-zu-Ende-Verbindung nicht,
+        puffert allerdings alle Pakete und versucht sie schnell zu wiederholen,
+        Pakete die im Datenstrom des Mobilknotens fehlen werden direkt
+        nachgefordert und "ahnliches. Dies hat den Vorteil, da"s die Verbindung
+        wirklich bis zur Mobilstation geht, allerdings wird das Netz nicht so
+        gut gegen die Fehler der Funkstrecke abgeschirmt.
+      \subsubsection*{Mobile TCP}
+        Bei Mobile TCP trennt der Zugangspunkt die TCP-Verbindung zwar auch,
+        puffert aber keine Daten und sendet auch keine Best"atigungen. (Der
+        Zugangspunkt geht davon aus, da"s die Qualit"at der Funkstreck o.k. ist,
+        also sollen sich die Partner selbst um Wiederholungen k"ummern).
+        Stattdessen untersucht der Zugangspunkt, ob noch Best"atigungen vom
+        Mobilen Knoten kommen. Ist das nicht der Fall geht er davon aus, da"s
+        der mobile Host nicht erreichbar ist und setzt das Empfangsfenster auf
+        null. Daher wird der Kommunikationspatner nicht versuchen, in dieser
+        Zeit Daten zu senden.
+  \section{Sitzungsschicht}
+    Diese Schicht sollte es Benutzern erm"oglichen, Sitzungen zwischen zwei
+    Maschinen aufzubauen. Dies geschieht allerdings in der Praxis auf
+    Anwendungsebene, und nicht im Protokollstapel.
+  \section{Darstellungsschicht}
+    Diese Schicht kennt die Repr"asentation von Daten und repr"asentiert sie
+    auf standartiesierte Weise. Z.b. k"onnten Datenformate entsprechend
+    konvertiert werden. Diese Schicht wird praktisch nie eingesetzt,
+    Konvertierungen finden auf Anwendungsebene statt.
+  \section{Verarbeitungsschicht}
+    Diese Schicht enth"alt die Anwendungsspezifischen Protokolle.
+  \section{Sonstige Systeme}
+    \subsection*{ISDN}
+      ISDN stellt verschiedene Digitale Dienste f"ur Telefonie und
+      Daten"ubertragung zur Verf"ugung. ISDN definiert eine Reihe von
+      "Ubertragungskan"alen. Benutzt werden allgemein der B-Kanal, ein 64 kbps
+      Daten-/Sprachkanal (Ende-zu-Ende) der eine \glqq Datenpipeline\grqq\ 
+      auf Schicht 1
+      darstellt (f"ur Sprache wird er als PCM-Kanal benutzt), und der D-Kanal
+      f"ur Zeichengabe, der 16 kbps (paketweise) gesichert "uber ein HDLC/LAPD-"ahnliches
+      Protokoll "ubertr"agt (Schicht 3).
+      
+      ISDN definiert eine Reihe von Standardschnittstellen: V, f"ur die
+      "Ubertragung zwischen Vermitllungstelle und Vermittlungsanschlu"s (?), U
+      zwischen Vermittlungsstelle und Netzwerkterminator (NT, entspr. NTBA), und
+      T nach dem Basisanschlu"s. Entweder werden an die T-Schnittstelle
+      ($ S_0 $-Bus) bis zu 8 Ger"ate gleich angeschlossen, oder es gibt eine
+      Nebenstellenanlage, die dann eine S-Schnittstelle (auch $S_0$-Bus) zur
+      Verf"ugung stellt. "Uber einen Terminaladapter (TA, entspr. a/d-Wandler)
+      k"onnen nicht ISDN-f"ahige Ger"ate an die R-Schnittstelle angeschlossen
+      werden.
+      
+      Die D-Kanal-Rahmen im ISDN enthalten eine SAPI (Service Access Point
+      Identifier, gibt den Dienst an (so "ahnlich wie eine Portnummer), und eine
+      TEI (Terminal Endpoint Identifier), die (0-126) das ISDN-Ger"at anspricht
+      (127 -> Rundruf). Die TEI kann fest eingestellt sein, oder wird von der
+      Vermittlungsstelle vergeben.
+      
+      Beim ISDN werden die Kan"ale von der Vermittlungsstelle bis zum NT
+      (U-Schnittstelle) "uber eine gew"ohnliche Telefonleitung gemultiplext. Es
+      werden jeweils 48 bit in 250 $\mu$s "ubertragen, d.h. 192 kbit/s. Jeder
+      dieser Rahmen enth"alt 12 bit an Protokollinformationen, so da"s 144 
+      kbit/s f"ur zwei B-Kan"ale und den D-Kanal bleibt.
+    \subsection*{GSM}
+    \subsection*{Bluetooth}
+    \subsection*{Frame Relay}
+    \subsection*{X25}
+    \subsection*{ATM}
+      ATM wird absichtlich nicht innerhalb der "ublichen sieben Schichten
+      behandelt, da ATM ein eigenes Referenzmodell hat. Zwar wird offensichtlich
+      hei"s diskutiert, welche ATM-Schicht jetzt welcher OSI-Schicht entspricht,
+      doch das ist wohl eher eine Glaubensfrage. Wir nehmen das ATM Modell als
+      gegeben hin.
+      
+      Eigentlich ist das ATM-Referenzmodell kein reines Schichtenmodell, sondern
+      wird oft als W"urfel dargestellt. Zus"atzlich zu den Schichten Besitzt ATM
+      mehrere \textit{Ebenen}, und zwar eine Ebene f"ur das Ebenenmanagement,
+      und eine f"ur das Schichtenmanagement (die nat"urlich f"ur jede Schicht
+      vorhanden ist). Die eigentlichen Schichten sind nochmals in eine Netz- und
+      eine Benutzerschicht geteilt.
+      
+      Die eigentlichen \textbf{ATM-Schichten} sind die physikalische Schicht,
+      die ATM-Schicht und die ATM-Anpassungsschicht.
+      
+      Die ATM-Schicht ist der eigentliche Kern der Hierarchie, sie stellt einen
+      reihenfolgentreuen aber unzuverl"assigen Dienst zur Verf"ugung, der 53
+      Byte lange \textbf{ATM-Zellen} "uber virtuelle Verbindungen transportiert.
+      \subsubsection*{Physikalische Schicht}
+        Die physikalische Schicht in ATM ist zweigeteilt. Der untere Teil, die
+        eigentliche physikalische Schicht, ist f"ur die eigentliche "Ubertragung
+        der Daten "uber das Medium zust"andig.
+        
+        Der obere Teil der Schicht, der Transmission Convergence (TC) Layer,
+        "ubernimmt Aufgaben, die im OSI-Modell in Schicht 2 liegen:
+        Zellenbildung, Berechnung der Zellchecksumme und "ahnliches mehr. Beim
+        einem synchronen Medium werden zus"atzlich leeren (tr"age) Zellen in den
+        Strom eingef"ugt wenn keine Daten vorliegen. Bei einem asychronen Medium
+        ist das Verfahren zum Finden der Zellgrenzen recht witzig: Die Daten
+        werden Bit f"ur Bit durch ein Schieberegister geschoben, bis ATM etwas
+        findet das wie ein Zellkopf mit einer g"ultigen Pr"ufsumme aussieht. 
+      \subsubsection*{Das ATM-Zellformat}
+        Das Format der ATM-Zellen ist sowohl der ATM- als auch der
+        physikalischen Schicht bekannt, was nat"urlich die Methoden des
+        Schichtenentwurfes verletzt (allerdings scheint das bei praktischen
+        Systemen h"aufiger vorzukommen... siehe TCP).
+        
+        Die ATM-Zellen kommen in zwei Versionen: User-zu-Netz (User Network
+        Interface UNI) und Netz-zu-Netz (Network Network Interface NNI). Der
+        einzige Unterschied zwischen den beiden ist, da"s die UNI-Zellen am
+        Anfang ein zus"atzliches Feld haben (daf"ur eine k"urzer Path ID).
+        Dieses Feld war f"ur irgendwelche Steurzwecke vorgesehen, und wird nicht
+        benutzt. Jede Zelle hat zun"achst einmal eine Virtual Path ID (VPI) und
+        eine Virtual Channel ID (VCI), die f"ur Routing und Adressierung genutzt
+        werden. Au"serdem ist ein Feld f"ur mit Informationen "uber die
+        enthaltenen Daten vorhanden (Payload Type, PTI), und ein Bit, da"s ob
+        die Daten bei Staus als erste verworfen werden sollen (Cell Loss
+        Priority, CLP). Der 40 Bit gro"se Header wird durch eine 8 Bit
+        Pr"ufsumme gesch"utzt. Danach folgen 48 Byte ungesch"utzte Daten.
+      \subsubsection*{Die ATM-Schicht}
+        Die ATM-Schicht entspricht in vielen Belangen der Vermittlungsschicht im
+        OSI-Modell. Insbesondere wird hier das Routing und die Stau"uberwachung
+        realisiert. Die ATM-Schicht bietet den Endstellen einen
+        reihenfolgentreuen, nicht zuverl"assigen Dienst an (d.h. Zellen d"urfen
+        verloren gehen). "Uber die Dienstg"ute darf von den Endstellen und vom
+        Netz verhandelt werden.
+        
+        Beim \textbf{Verbindungsaufbau} kann zun"achst einmal zwischen
+        verschiedenen \textbf{Dienstklassen} gew"ahlt werden:
+        \begin{itemize}
+          \item{\textbf{Constant Bitrate, CBR:} Es wird eine feste Bandbreite
+          f"ur diese Verbindung reserviert. Diese Brandbeite steht immer zur
+          Verf"ugung.}
+          \item{\textbf{Variable Bitrate, VBR:} Dieser Dienst ist f"ur
+          Anwendungen mit variablen Bitraten ausgelegt, er ist in einer Version
+          mit Echtzeitanforderungen (VBR-RT) ohne Jitter und in einer Version
+          ohne Echtzeitanforderungen (VBR-NRT) zu haben. Auch hier werden die
+          Resourcen im Vorraus reserviert}
+          \item{\textbf{Available Bitrate, ABR:} Hier werden eine minimale und
+          eine maximale Bitrate ausgehandelt. Die Resourcen f"ur die minimale
+          Bitrate werden reserviert, alles was dar"uber hinausgeht wird nach
+          bestem Bem"uhen zur Verf"ugung gestellt. Dies ist die einzige Klasse,
+          die Informationen "uber "Uberlastungen erh"alt.}
+          \item{\textbf{Unspecified Bitrate, UBR:} Grob gesagt: Die Station darf
+          Daten senden wie sie will und wenn Resourcen vorhanden sind werden
+          die Daten sogar "ubertragen. Eine Benarichtigung "uber "Uberlastung
+          findet nicht statt.}
+        \end{itemize}
+        ATM benutzt in jedem Fall feste Verbindungen, die in alle Router entlang
+        der Strecke eingetragen werden -- Zellen der gleichen Verbindung laufen
+        also auch immer "uber die gleiche Route. Welche Route eine Zelle
+        einschlagen soll, entscheidet der Router anhand der Path ID, die Channel
+        ID dient dazu, verschiedene Verbindungen zwischen den gleichen
+        Endsystemen zu unterscheiden (allerdings ist es theorestisch auch
+        m"oglich, da"s die Router auch die Channel ID heranziehen). Um einen
+        solchen Pfad aufzubauen, wird zuerst eine Verbindungsanfrage (SETUP) 
+        "uber Pfad 0, Kanal 5 an die jeweils n"achste Gegenstelle gesendet. Die
+        Gegenstelle best"atigt die Verbindungsanfrage (CALL PROCEEDING),
+        reserviert die ben"otigten Resourcen, tr"agt die Verbindung in seine
+        Routingtabelle ein und kontaktiert den n"achsten
+        Router auf dem Pfad. Sind nicht genug Resourcen vorhanden, wird der
+        Verbindungswunsch abgelehnt und es kann versucht werden einen anderen
+        Pfad zu verwenden. Dies geht solange weiter, bis der gew"unschte
+        Teilnehmer erreicht ist. Dieser sendet dann eine CONNECT-Nachricht auf
+        dem selben Weg zur"uckt (auch diese wird wieder auf jeder Teilstreck
+        best"atigt. Danach steht die Verbindung, und ein Router mu"s ein
+        eingehendes Paket nur noch noch der Pfad-ID "uberpr"ufen und
+        entsprechend weiterleiten. Um beim Verbindungsaufbau den richtigen Pfad
+        in Richtung Ziel zu finden, k"onnen die Router einen beliebigen
+        Routingalgorithmus verwenden. Verbindungen k"onnen au"serdem vom
+        Netzbetreiber permanent eingerichtet werden. Um eine Verbindung
+        abzubauen, sendet der Teilnehmer eine RELEASE-Nachricht, die von der
+        Gegenstelle best"atigt wird. Diese Nachricht pflanzt sich dann wie
+        gehabt durch das Netz fort, bis die Verbindung komplett abgebaut ist.
+        
+        Bei jedem Verbindungswunsch wird die \textbf{Dienstqualit"at} mit
+        ausgehandelt, also z.B. die minimale, maximale und durchschnittliche
+        Zellrate, zul"assige Verz"ogerung und Jitter, maximale Verlustrate und
+        Toleranzen. 
+        
+        Eine \textbf{ATM-Adresse} kann verschiedene Formate haben, zul"assig
+        sind z.B. OSI-Adresse und ISDN-Telefonnummern.
+      \subsubsection*{Traffic-Shaping}
+        Damit eine Station die ihr zugewiesene Bandbreite nicht "ubersteigt wird
+        eine Art Bucket-Mechanismus verwendet: ATM geht davon aus, da"s
+        h"ochsten alle $ T $ Zeiteinheiten eine Zelle gesendet wird. Eine
+        gewisse Toleranz ist zul"assig, doch die n"achste Zelle ist auf jeden
+        Fall erst zum Zeitpunkt $ 2T $ zul"assig, damit die Toleranz nicht
+        ausgenutzt wird. 
+      \subsubsection*{"Uberlastungs"uberwachung der ATM-Schicht}
+        Eine "Uberlastungs"uberwachung f"ur das Netz wird nur in der
+        ABR-Dienstklasse geboten. Dazu wird alle $ k $ Zellen eine
+        Resourcenmanagement- (RC-) Zelle gesendet, die nach ihrer Ankunft
+        umkehrt und in die Gegenrichtung zur"uckgesendet wird. Sowohl auf dem
+        Hin- als auch auf dem Rückweg k"onnen hier die Vermittler die maximal
+        zul"assige Bitrate eintragen (Vermittler k"onnen auch selbst RC-Zellen
+        losschicken). Kommt die RC-Zelle nicht zur"uck, wird dies als
+        "Uberlastung interpretiert. 
+      \subsubsection*{Die ATM-Anpassungsschicht (AAL)}
+        Die AAL-Schicht bietet etwas praktischere Dienste an, insbesondere zum
+        Verschicken gr"o"serer Datenpakete. Es gibt verschiedene Dienste,
+        zuverl"assige und unzuverl"assige, aber keinen einfachen
+        verbindungsorientierten Dienst wie TCP.
+        
+        Eigentlich besteht die AAL- Schicht aus drei Unterschichten: Einer
+        AAL-Konvergenzschicht, die in einen allgemeinen und einen
+        anwendungsspezifischen Teil geteilt ist, und der SAR-(Segmentation and
+        Reassembly-)Teilschicht. 
+        
+        \textbf{AAL 1} bietet einen unzuverl"assigen Dienst f"ur z.B.
+        Video"ubertragungen, der lediglich fehlende und falsch eingef"ugte
+        Zellen erkennt. AAL 1 benutzt keinen Header auf der Konvergenzschicht
+        und f"ugt zu jeder Zelle eine 3-bit Folgenummer hinzu die durch eine
+        3-bit Checksumme und ein Parit"atsbit gesch"utzt wird. Optional ist noch
+        ein Zeiger auf die Daten vorhanden, falls diese nicht an einer
+        Zellgrenze ausgerichtet sind.
+        
+        \textbf{AAL 2} sollte einen "ahnlichen Dienst wie AAL 1 anbieten,
+        allerdings besser auf variable Bitraten ausgerichtet. Der Standard wurde
+        so eingerichtet, da"s er nicht zu benutzen ist (Feldl"angen fehlen).
+        
+        \textbf{AAL 3/4} bietet die zuverl"assige und unzuverl"assige
+        "Ubertragung von Datenstr"omen oder Nachrichten bis 64k an. Au"serdem
+        kann AAL 3/4 mehrere Sitzungen "uber einen einzelnen virtuellen Kanal
+        multiplexen. Diese AAL-Schicht verwendet einen Header sowohl auf der
+        Konvergenzschicht, als auch f"ur jede einzelne Zelle. Der
+        Konvergenzschicht-Header enth"alt ein Statusfeld (Nachrichtentyp u."a.),
+        ein Start- und Endeflag und eine L"angenangabe f"ur die enthaltenen
+        Daten. Eine L"angenangabe wird auch noch noch dem Endeflag angeh"angt.
+        Jede Zelle enth"alt dann noch einmal Typinformationen, einen
+        Folgenummer, eine ID f"ur das Multiplexing und eine 10-Bit Checksumme
+        (plus ein LI-Feld). 
+        
+        \textbf{AAL 5} wurde entwickelt, weil einigen Leuten der hohe Overhead
+        bei AAL 3/4 nicht gefiel. AAL 5 bietet "ahnliche Dienste an, hat aber
+        lediglich einen Header auf der Konvergenz-Schicht. Ein Paket besteht
+        hier aus bis zu 64k Daten, einem Feld f"ur Steuerinformationen der
+        h"oheren Schicht, einem Feld f"ur sp"atere Verwendung, einer
+        L"angenangabe und einer 4-Byte Pr"ufsumme. In jeder Zelle werden alle 48
+        Byte f"ur Daten benutzt, Paketgrenzen werden "uber ein Bit in den
+        Steuerinformationen der ATM-Zelle erkannt. (Nicht ganz elegant, aber
+        effizient.
+  \section*{Copyright}
+    Das Urheberrecht an diesem Dokument (Werk) liegt bei Daniel Hahn (Autor)
+    (dhahn@gmx.de). 
+    
+    Dieses Werk darf - zu nichtgewerblichen Zwecken - 
+    in elektronischer und gedruckter Form frei vervielf"altigt und 
+    verbreitet werden.
+    
+    Die Erstellung und Verbreitung von Bearbeitungen, die auf diesem Werk
+    basieren, ist - zu nichtgewerblichen Zwecken - gestattet wenn 
+    \begin{itemize}
+    	\item{die Bearbeitung als solche deutlich kenntlich gemacht wird.}
+        \item{alle Hinweise auf den Autor, die Warnungen am Anfang sowie dieser
+              Copyrighthinweis erhalten bleiben.}
+        \item{der Autor der Bearbeitung allen Nutzern mindestens dieselben
+              Rechte einr"aumt wie der Autor des urspr"unglichen Werkes.}
+    \end{itemize}
+    Jede sonstige Vervielf"altigung und Verbreitung des Werkes, 
+    insbesondere die
+    Vervielf"altigung zu gewerblichen Zwecken, bedarf der ausdr"ucklichen
+    Genehmigung des Autors.
+\end{document}
